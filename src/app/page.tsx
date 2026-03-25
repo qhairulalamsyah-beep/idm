@@ -179,8 +179,7 @@ export default function HomePage() {
               <Trophy className={cn(
                 "w-5 h-5",
                 activeDivision === 'MALE' && "text-red-400 drop-shadow-[0_0_8px_rgba(239,68,68,0.6)]",
-                activeDivision === 'FEMALE' && "text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]",
-                activeDivision === 'LIGA' && "text-emerald-400 drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]"
+                activeDivision === 'FEMALE' && "text-purple-400 drop-shadow-[0_0_8px_rgba(168,85,247,0.6)]"
               )} />
               <span className="bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent font-bold">
                 Tournament Bracket
@@ -568,8 +567,7 @@ function ChampionsContent() {
                 "p-5 rounded-2xl border transition-all duration-300",
                 "bg-gradient-to-br from-slate-900 via-slate-800/80 to-slate-900",
                 champ.tournament.division === 'MALE' && "border-red-500/30",
-                champ.tournament.division === 'FEMALE' && "border-purple-500/30",
-                champ.tournament.division === 'LIGA' && "border-emerald-500/30"
+                champ.tournament.division === 'FEMALE' && "border-purple-500/30"
               )}
             >
               <div className="flex items-start justify-between mb-3">
@@ -577,8 +575,7 @@ function ChampionsContent() {
                   <Badge className={cn(
                     "mb-2",
                     champ.tournament.division === 'MALE' && "bg-red-500/20 text-red-400 border-red-500/30",
-                    champ.tournament.division === 'FEMALE' && "bg-purple-500/20 text-purple-400 border-purple-500/30",
-                    champ.tournament.division === 'LIGA' && "bg-emerald-500/20 text-emerald-400 border-emerald-500/30"
+                    champ.tournament.division === 'FEMALE' && "bg-purple-500/20 text-purple-400 border-purple-500/30"
                   )}>
                     {champ.tournament.division}
                   </Badge>
@@ -679,14 +676,12 @@ function TeamsContent() {
         <div className={cn(
           "w-10 h-10 rounded-xl flex items-center justify-center bg-gradient-to-br",
           activeDivision === 'MALE' && "from-red-500/20 to-red-600/10 border border-red-500/30",
-          activeDivision === 'FEMALE' && "from-purple-500/20 to-purple-600/10 border border-purple-500/30",
-          activeDivision === 'LIGA' && "from-emerald-500/20 to-emerald-600/10 border border-emerald-500/30"
+          activeDivision === 'FEMALE' && "from-purple-500/20 to-purple-600/10 border border-purple-500/30"
         )}>
           <Gamepad2 className={cn(
             "w-5 h-5",
             activeDivision === 'MALE' && "text-red-400",
-            activeDivision === 'FEMALE' && "text-purple-400",
-            activeDivision === 'LIGA' && "text-emerald-400"
+            activeDivision === 'FEMALE' && "text-purple-400"
           )} />
         </div>
         <div>
@@ -758,8 +753,7 @@ function TeamsContent() {
                   <div key={team.id} className={cn(
                     "p-4 rounded-2xl border bg-gradient-to-br from-slate-900 to-slate-800/50",
                     activeDivision === 'MALE' && "border-red-500/20",
-                    activeDivision === 'FEMALE' && "border-purple-500/20",
-                    activeDivision === 'LIGA' && "border-emerald-500/20"
+                    activeDivision === 'FEMALE' && "border-purple-500/20"
                   )}>
                     <p className="font-semibold text-white">{team.name}</p>
                     {team.members && team.members.length > 0 && (
@@ -955,8 +949,7 @@ function ProfileContent() {
             className={cn(
               "px-8 py-3 rounded-xl font-medium transition-all duration-300 shadow-lg",
               activeDivision === 'MALE' && "bg-gradient-to-r from-red-500 to-red-600 shadow-red-500/30",
-              activeDivision === 'FEMALE' && "bg-gradient-to-r from-purple-500 to-purple-600 shadow-purple-500/30",
-              activeDivision === 'LIGA' && "bg-gradient-to-r from-emerald-500 to-emerald-600 shadow-emerald-500/30"
+              activeDivision === 'FEMALE' && "bg-gradient-to-r from-purple-500 to-purple-600 shadow-purple-500/30"
             )}
             aria-label="Login atau Daftar"
           >

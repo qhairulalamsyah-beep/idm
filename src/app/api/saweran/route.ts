@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
         const defaultTournament = await db.tournament.create({
           data: {
             name: 'Turnamen Saweran',
-            division: 'LIGA',
+            division: 'MALE',
             mode: 'GR Arena 3vs3',
             bpm: 'Random 120-140',
             bracketType: 'SINGLE_ELIMINATION',

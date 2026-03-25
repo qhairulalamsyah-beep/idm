@@ -3,7 +3,7 @@
 export interface Tournament {
   id: string;
   name: string;
-  division: 'MALE' | 'FEMALE' | 'LIGA';
+  division: 'MALE' | 'FEMALE';
   mode: string;
   bpm: string;
   bracketType: string;
@@ -82,7 +82,7 @@ export interface Match {
 }
 
 // Fetch tournaments by division
-export async function fetchTournaments(division?: 'MALE' | 'FEMALE' | 'LIGA') {
+export async function fetchTournaments(division?: 'MALE' | 'FEMALE') {
   const url = division ? `/api/tournaments?division=${division}` : '/api/tournaments';
   const response = await fetch(url);
   const result = await response.json();

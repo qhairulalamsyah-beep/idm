@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils';
 const tabs: { id: Division; label: string; emoji: string }[] = [
   { id: 'MALE', label: 'Male', emoji: '♂️' },
   { id: 'FEMALE', label: 'Female', emoji: '♀️' },
-  { id: 'LIGA', label: 'Liga', emoji: '👑' },
 ];
 
 export function DivisionTabs() {
@@ -26,17 +25,14 @@ export function DivisionTabs() {
             }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className={cn(
-              "absolute w-1/3 h-[calc(100%-8px)] rounded-lg",
+              "absolute w-1/2 h-[calc(100%-8px)] rounded-lg",
               activeDivision === 'MALE' && "bg-gradient-to-r from-red-600/80 to-red-700/80",
-              activeDivision === 'FEMALE' && "bg-gradient-to-r from-purple-600/80 to-pink-600/80",
-              activeDivision === 'LIGA' && "bg-gradient-to-r from-emerald-600/80 to-teal-600/80"
+              activeDivision === 'FEMALE' && "bg-gradient-to-r from-purple-600/80 to-pink-600/80"
             )}
             style={{
-              boxShadow: activeDivision === 'MALE' 
-                ? '0 0 20px rgba(239, 68, 68, 0.4)' 
-                : activeDivision === 'FEMALE'
-                ? '0 0 20px rgba(168, 85, 247, 0.4)'
-                : '0 0 20px rgba(16, 185, 129, 0.4)'
+              boxShadow: activeDivision === 'MALE'
+                ? '0 0 20px rgba(239, 68, 68, 0.4)'
+                : '0 0 20px rgba(168, 85, 247, 0.4)'
             }}
           />
 
@@ -45,7 +41,7 @@ export function DivisionTabs() {
               key={tab.id}
               onClick={() => setActiveDivision(tab.id)}
               className={cn(
-                "relative z-10 flex items-center gap-2 px-5 py-2.5 rounded-lg",
+                "relative z-10 flex items-center gap-2 px-8 py-2.5 rounded-lg",
                 "text-sm font-semibold transition-all duration-200",
                 "touch-feedback",
                 activeDivision === tab.id

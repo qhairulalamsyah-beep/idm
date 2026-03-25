@@ -114,7 +114,6 @@ export function PrizePool() {
   const accentColors = {
     MALE: { border: 'border-red-500/30', glow: 'rgba(239, 68, 68, 0.1)' },
     FEMALE: { border: 'border-purple-500/30', glow: 'rgba(168, 85, 247, 0.1)' },
-    LIGA: { border: 'border-emerald-500/30', glow: 'rgba(16, 185, 129, 0.1)' },
   };
 
   if (isLoading) {
@@ -196,8 +195,7 @@ export function PrizePool() {
               "px-3 py-1 rounded-full text-xs font-bold",
               "bg-gradient-to-r text-white",
               activeDivision === 'MALE' && "from-red-500 to-red-600",
-              activeDivision === 'FEMALE' && "from-purple-500 to-pink-500",
-              activeDivision === 'LIGA' && "from-emerald-500 to-teal-500"
+              activeDivision === 'FEMALE' && "from-purple-500 to-pink-500"
             )}
             style={{
               boxShadow: `0 0 10px ${theme.neonColor}50`,

@@ -79,7 +79,6 @@ const STATUS_LABELS: Record<string, string> = {
 const ACCENT_BUTTONS: Record<Division, string> = {
   MALE: 'from-red-500 to-red-700 hover:from-red-400 hover:to-red-600',
   FEMALE: 'from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500',
-  LIGA: 'from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500',
 };
 
 // ============================================
@@ -403,8 +402,7 @@ export function TournamentHeroCard({ onOpenDonation, onOpenBracket }: Tournament
                 className={cn(
                   "h-full rounded-full",
                   activeDivision === 'MALE' && "bg-gradient-to-r from-red-500 to-red-400",
-                  activeDivision === 'FEMALE' && "bg-gradient-to-r from-purple-500 to-pink-400",
-                  activeDivision === 'LIGA' && "bg-gradient-to-r from-emerald-500 to-teal-400"
+                  activeDivision === 'FEMALE' && "bg-gradient-to-r from-purple-500 to-pink-400"
                 )}
                 style={{
                   boxShadow: `0 0 10px ${theme.neonColor}60`,

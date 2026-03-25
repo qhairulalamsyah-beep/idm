@@ -142,7 +142,6 @@ export function TournamentManagement() {
     }
   };
 
-  const isLiga = selectedTournament?.division === 'LIGA';
   const statusInfo = selectedTournament ? STATUS_CONFIG[selectedTournament.status] : null;
 
   // Progress steps
@@ -180,7 +179,6 @@ export function TournamentManagement() {
                     <SelectContent className="bg-slate-800 border-slate-700">
                       <SelectItem value="MALE">♂ Male</SelectItem>
                       <SelectItem value="FEMALE">♀ Female</SelectItem>
-                      <SelectItem value="LIGA">👑 Liga IDM</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -272,7 +270,6 @@ export function TournamentManagement() {
       ) : (
         <TournamentDetail
           tournament={selectedTournament}
-          isLiga={isLiga}
           steps={steps}
           currentStepIndex={currentStepIndex}
           statusInfo={statusInfo}
@@ -294,7 +291,7 @@ function TournamentList({ tournaments, isLoading, onSelect }: { tournaments: Tou
     <div className="space-y-3">
       {/* Filter Pills */}
       <div className="flex gap-2 overflow-x-auto pb-1">
-        {(['ALL', 'MALE', 'FEMALE', 'LIGA'] as const).map((div) => (
+        {(['ALL', 'MALE', 'FEMALE'] as const).map((div) => (
           <button
             key={div}
             onClick={() => setFilter(div)}
@@ -303,12 +300,11 @@ function TournamentList({ tournaments, isLoading, onSelect }: { tournaments: Tou
               filter === div
                 ? div === 'MALE' ? "bg-red-500/20 text-red-400 border border-red-500/30"
                   : div === 'FEMALE' ? "bg-purple-500/20 text-purple-400 border border-purple-500/30"
-                  : div === 'LIGA' ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                   : "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"
                 : "bg-slate-800/50 text-slate-400 border border-slate-700/50"
             )}
           >
-            {div === 'ALL' ? 'Semua' : div === 'MALE' ? '♂ Male' : div === 'FEMALE' ? '♀ Female' : '👑 Liga'}
+            {div === 'ALL' ? 'Semua' : div === 'MALE' ? '♂ Male' : '♀ Female'}
           </button>
         ))}
       </div>
@@ -332,8 +328,7 @@ function TournamentList({ tournaments, isLoading, onSelect }: { tournaments: Tou
               className={cn(
                 "w-full p-4 rounded-2xl border text-left transition-all",
                 t.division === 'MALE' && "bg-slate-800/50 border-red-500/20 hover:border-red-500/40",
-                t.division === 'FEMALE' && "bg-slate-800/50 border-purple-500/20 hover:border-purple-500/40",
-                t.division === 'LIGA' && "bg-slate-800/50 border-emerald-500/20 hover:border-emerald-500/40"
+                t.division === 'FEMALE' && "bg-slate-800/50 border-purple-500/20 hover:border-purple-500/40"
               )}
             >
               <div className="flex items-center justify-between">
@@ -342,10 +337,9 @@ function TournamentList({ tournaments, isLoading, onSelect }: { tournaments: Tou
                     <span className={cn(
                       "text-lg",
                       t.division === 'MALE' && "text-red-400",
-                      t.division === 'FEMALE' && "text-purple-400",
-                      t.division === 'LIGA' && "text-emerald-400"
+                      t.division === 'FEMALE' && "text-purple-400"
                     )}>
-                      {t.division === 'MALE' ? '♂' : t.division === 'FEMALE' ? '♀' : '👑'}
+                      {t.division === 'MALE' ? '♂' : '♀'}
                     </span>
                     <h3 className="font-semibold text-white truncate">{t.name}</h3>
                   </div>
@@ -370,9 +364,8 @@ function TournamentList({ tournaments, isLoading, onSelect }: { tournaments: Tou
 }
 
 // ============ TOURNAMENT DETAIL ============
-function TournamentDetail({ tournament, isLiga, steps, currentStepIndex, statusInfo, user, onBack, onRefresh }: {
+function TournamentDetail({ tournament, steps, currentStepIndex, statusInfo, user, onBack, onRefresh }: {
   tournament: Tournament;
-  isLiga: boolean;
   steps: string[];
   currentStepIndex: number;
   statusInfo: { label: string; color: string; next: string; nextLabel: string } | null;
@@ -490,11 +483,10 @@ function TournamentDetail({ tournament, isLiga, steps, currentStepIndex, statusI
       <div className={cn(
         "p-4 rounded-2xl border",
         tournament.division === 'MALE' && "bg-gradient-to-br from-red-500/10 to-slate-900 border-red-500/30",
-        tournament.division === 'FEMALE' && "bg-gradient-to-br from-purple-500/10 to-slate-900 border-purple-500/30",
-        tournament.division === 'LIGA' && "bg-gradient-to-br from-emerald-500/10 to-slate-900 border-emerald-500/30"
+        tournament.division === 'FEMALE' && "bg-gradient-to-br from-purple-500/10 to-slate-900 border-purple-500/30"
       )}>
         <div className="flex items-center gap-3">
-          <span className="text-3xl">{tournament.division === 'MALE' ? '♂' : tournament.division === 'FEMALE' ? '♀' : '👑'}</span>
+          <span className="text-3xl">{tournament.division === 'MALE' ? '♂' : '♀'}</span>
           <div className="flex-1">
             <h2 className="text-xl font-bold text-white">{tournament.name}</h2>
             <p className="text-sm text-slate-400">{tournament.mode} • {tournament.location || 'Online'}</p>
@@ -542,10 +534,10 @@ function TournamentDetail({ tournament, isLiga, steps, currentStepIndex, statusI
           <RegistrationContent tournament={tournament} />
         )}
         {tournament.status === 'APPROVAL' && (
-          <ApprovalContent tournament={tournament} isLiga={isLiga} user={user} onRefresh={onRefresh} />
+          <ApprovalContent tournament={tournament} user={user} onRefresh={onRefresh} />
         )}
         {tournament.status === 'TEAM_GENERATION' && (
-          <TeamContent tournament={tournament} isLiga={isLiga} />
+          <TeamContent tournament={tournament} />
         )}
         {tournament.status === 'BRACKET_GENERATION' && (
           <BracketContent tournament={tournament} />
@@ -717,7 +709,7 @@ function RegistrationContent({ tournament }: { tournament: Tournament }) {
   );
 }
 
-function ApprovalContent({ tournament, isLiga, user, onRefresh }: { tournament: Tournament; isLiga: boolean; user: any; onRefresh: () => void }) {
+function ApprovalContent({ tournament, user, onRefresh }: { tournament: Tournament; user: any; onRefresh: () => void }) {
   const [processingId, setProcessingId] = useState<string | null>(null);
   const pendingRegs = tournament.registrations?.filter(r => r.status === 'PENDING') || [];
 
@@ -758,7 +750,7 @@ function ApprovalContent({ tournament, isLiga, user, onRefresh }: { tournament: 
             <p className="text-xs text-slate-400">{reg.user.phone}</p>
           </div>
           <div className="flex gap-1 ml-2">
-            {!isLiga ? (
+            {true ? (
               <Select onValueChange={(tier) => approve(reg.id, tier)} disabled={processingId === reg.id}>
                 <SelectTrigger className="w-20 h-8 bg-green-500/20 border-green-500/30 text-green-400 text-xs">
                   <SelectValue placeholder="Tier" />
@@ -781,12 +773,12 @@ function ApprovalContent({ tournament, isLiga, user, onRefresh }: { tournament: 
   );
 }
 
-function TeamContent({ tournament, isLiga }: { tournament: Tournament; isLiga: boolean }) {
+function TeamContent({ tournament }: { tournament: Tournament }) {
   const teams = tournament.teams || [];
   return (
     <div className="space-y-3">
       <div className="p-3 rounded-xl bg-blue-500/10 border border-blue-500/30 text-center">
-        <p className="text-sm text-blue-400">{isLiga ? 'Tim sudah dikonfirmasi' : 'Tim digenerate otomatis dengan komposisi seimbang (S+A+B)'}</p>
+        <p className="text-sm text-blue-400">Tim digenerate otomatis dengan komposisi seimbang (S+A+B)</p>
       </div>
       {teams.length > 0 ? (
         <div className="grid grid-cols-2 gap-2 max-h-[150px] overflow-y-auto">

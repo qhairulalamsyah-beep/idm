@@ -440,7 +440,6 @@ export function AdminDashboard() {
   const divisionColors: Record<string, string> = {
     MALE: 'text-red-400',
     FEMALE: 'text-purple-400',
-    LIGA: 'text-emerald-400',
   };
 
   // Render based on active section
@@ -656,7 +655,6 @@ export function AdminDashboard() {
                         <SelectContent className="bg-slate-800 border-slate-700">
                           <SelectItem value="MALE">♂ Male</SelectItem>
                           <SelectItem value="FEMALE">♀ Female</SelectItem>
-                          <SelectItem value="LIGA">👑 Liga IDM</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -842,8 +840,7 @@ export function AdminDashboard() {
                         <span className={cn(
                           "font-medium",
                           formData.division === 'MALE' && "text-red-400",
-                          formData.division === 'FEMALE' && "text-purple-400",
-                          formData.division === 'LIGA' && "text-emerald-400"
+                          formData.division === 'FEMALE' && "text-purple-400"
                         )}>{formData.division}</span>
                       </div>
                       <div className="flex justify-between">
@@ -1077,7 +1074,6 @@ function TournamentCard({ tournament, onClick }: { tournament: Tournament; onCli
   const divisionColors: Record<string, string> = {
     MALE: 'border-red-500/30',
     FEMALE: 'border-purple-500/30',
-    LIGA: 'border-emerald-500/30',
   };
 
   return (
@@ -1215,8 +1211,7 @@ function TournamentDetail({ tournament, onBack, onUpdateStatus, onGenerateTeams,
             <Badge className={cn(
               "mb-2",
               tournament.division === 'MALE' && "bg-red-500/20 text-red-400",
-              tournament.division === 'FEMALE' && "bg-purple-500/20 text-purple-400",
-              tournament.division === 'LIGA' && "bg-emerald-500/20 text-emerald-400"
+              tournament.division === 'FEMALE' && "bg-purple-500/20 text-purple-400"
             )}>
               {tournament.division}
             </Badge>

@@ -33,13 +33,6 @@ export function BottomNavigation() {
       shadow: '0 0 25px rgba(168, 85, 247, 0.4)',
       bg: 'bg-purple-500',
     },
-    LIGA: {
-      accent: 'text-emerald-400',
-      glow: 'drop-shadow-[0_0_8px_rgba(16,185,129,0.6)]',
-      border: 'border-emerald-500/30',
-      shadow: '0 0 25px rgba(16, 185, 129, 0.4)',
-      bg: 'bg-emerald-500',
-    },
   };
 
   const style = divisionStyles[activeDivision];
@@ -69,8 +62,7 @@ export function BottomNavigation() {
           style.border,
           activeModal === 'bracket' && "ring-2 ring-offset-2 ring-offset-slate-900",
           activeModal === 'bracket' && activeDivision === 'MALE' && "ring-red-500",
-          activeModal === 'bracket' && activeDivision === 'FEMALE' && "ring-purple-500",
-          activeModal === 'bracket' && activeDivision === 'LIGA' && "ring-emerald-500"
+          activeModal === 'bracket' && activeDivision === 'FEMALE' && "ring-purple-500"
         )}
         style={{
           boxShadow: style.shadow,
@@ -81,8 +73,7 @@ export function BottomNavigation() {
         <div className={cn(
           "absolute inset-1 rounded-xl opacity-50",
           activeDivision === 'MALE' && "bg-gradient-to-br from-red-500/20 to-transparent",
-          activeDivision === 'FEMALE' && "bg-gradient-to-br from-purple-500/20 to-transparent",
-          activeDivision === 'LIGA' && "bg-gradient-to-br from-emerald-500/20 to-transparent"
+          activeDivision === 'FEMALE' && "bg-gradient-to-br from-purple-500/20 to-transparent"
         )} />
         <LayoutGrid className={cn("w-6 h-6 relative z-10", style.accent, style.glow)} />
       </motion.button>
@@ -124,8 +115,7 @@ export function BottomNavigation() {
                     className={cn(
                       "absolute inset-0 rounded-2xl",
                       activeDivision === 'MALE' && "bg-gradient-to-br from-red-500/30 to-red-600/10",
-                      activeDivision === 'FEMALE' && "bg-gradient-to-br from-purple-500/30 to-purple-600/10",
-                      activeDivision === 'LIGA' && "bg-gradient-to-br from-emerald-500/30 to-emerald-600/10"
+                      activeDivision === 'FEMALE' && "bg-gradient-to-br from-purple-500/30 to-purple-600/10"
                     )}
                     transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                     style={{

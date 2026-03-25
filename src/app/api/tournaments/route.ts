@@ -6,7 +6,7 @@ import { createTournament, getTournaments } from '@/lib/tournament/engine';
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const division = searchParams.get('division') as 'MALE' | 'FEMALE' | 'LIGA' | null;
+    const division = searchParams.get('division') as 'MALE' | 'FEMALE' | null;
     const status = searchParams.get('status');
 
     const where: Record<string, unknown> = {};

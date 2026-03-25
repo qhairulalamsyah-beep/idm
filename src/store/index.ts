@@ -5,7 +5,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 // Division Types & Theme Config
 // ============================================
 
-export type Division = 'MALE' | 'FEMALE' | 'LIGA';
+export type Division = 'MALE' | 'FEMALE';
 
 export interface DivisionTheme {
   name: string;
@@ -50,20 +50,6 @@ export const divisionThemes: Record<Division, DivisionTheme> = {
     textSecondary: 'text-purple-300/70',
     neonColor: '#a855f7',
     bgPattern: 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-slate-900 to-black',
-  },
-  LIGA: {
-    name: 'Liga IDM',
-    icon: '👑',
-    gradient: 'from-emerald-950 via-teal-900 to-slate-900',
-    gradientDark: 'from-emerald-950 via-slate-900 to-black',
-    accent: 'emerald',
-    accentGlow: 'shadow-emerald-500/30',
-    cardBg: 'bg-gradient-to-br from-emerald-950/80 to-slate-900/90',
-    cardBorder: 'border-emerald-500/30',
-    textPrimary: 'text-emerald-100',
-    textSecondary: 'text-emerald-300/70',
-    neonColor: '#10b981',
-    bgPattern: 'bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-emerald-900/20 via-slate-900 to-black',
   },
 };
 

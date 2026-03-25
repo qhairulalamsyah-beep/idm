@@ -86,8 +86,7 @@ export function RulesSection() {
                 <CheckCircle2 className={cn(
                   "w-4 h-4 mt-0.5 flex-shrink-0",
                   activeDivision === 'MALE' && "text-red-400",
-                  activeDivision === 'FEMALE' && "text-purple-400",
-                  activeDivision === 'LIGA' && "text-emerald-400"
+                  activeDivision === 'FEMALE' && "text-purple-400"
                 )} />
                 <span>{rule}</span>
               </motion.li>

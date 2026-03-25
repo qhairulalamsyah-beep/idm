@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
 // TYPES
 // ============================================
 
-export type Division = 'MALE' | 'FEMALE' | 'LIGA';
+export type Division = 'MALE' | 'FEMALE';
 export type BracketType = 'SINGLE_ELIMINATION' | 'DOUBLE_ELIMINATION' | 'ROUND_ROBIN' | 'GROUP_STAGE' | 'SWISS' | 'PLAYOFF';
 export type TournamentStatus = 'SETUP' | 'REGISTRATION' | 'APPROVAL' | 'TEAM_GENERATION' | 'BRACKET_GENERATION' | 'IN_PROGRESS' | 'FINALIZATION' | 'COMPLETED' | 'CANCELLED';
 export type Tier = 'S' | 'A' | 'B';
@@ -31,13 +31,6 @@ export const DIVISION_CONFIG = {
     allowClubRegistration: false,
     registrationType: 'INDIVIDUAL',
     description: 'Peserta mendaftar secara individual, admin membentuk tim dengan komposisi S+A+B',
-  },
-  LIGA: {
-    teamSize: 5,
-    requiresTierBalancing: false,
-    allowClubRegistration: true,
-    registrationType: 'TEAM', // Teams register as a complete unit
-    description: 'Club mendaftarkan tim lengkap (5 pemain), tidak ada generate tim',
   },
 } as const;
 
@@ -98,17 +91,10 @@ export class TournamentFlowManager {
       
       case 'REGISTRATION':
         // For Male/Female: need enough participants for teams
-        // For Liga: need at least 2 teams registered
-        if (this.division === 'LIGA') {
-          return tournament.teams.length >= 2;
-        }
         return tournament.registrations.length >= config.teamSize;
       
       case 'APPROVAL':
-        // Need at least some approved registrations (Male/Female) or teams (Liga)
-        if (this.division === 'LIGA') {
-          return tournament.teams.length >= 2;
-        }
+        // Need at least some approved registrations
         return tournament.registrations.length >= config.teamSize;
       
       case 'TEAM_GENERATION':
@@ -142,9 +128,7 @@ export class TournamentFlowManager {
         break;
       
       case 'APPROVAL':
-        if (this.division !== 'LIGA') {
-          actions.push('generate_teams');
-        }
+        actions.push('generate_teams');
         actions.push('proceed_to_bracket');
         break;
       
@@ -175,7 +159,7 @@ export class TournamentFlowManager {
     const transitions: Record<TournamentStatus, TournamentStatus | null> = {
       SETUP: 'REGISTRATION',
       REGISTRATION: 'APPROVAL',
-      APPROVAL: this.division === 'LIGA' ? 'BRACKET_GENERATION' : 'TEAM_GENERATION',
+      APPROVAL: 'TEAM_GENERATION',
       TEAM_GENERATION: 'BRACKET_GENERATION',
       BRACKET_GENERATION: 'IN_PROGRESS',
       IN_PROGRESS: 'FINALIZATION',

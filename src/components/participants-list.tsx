@@ -113,7 +113,6 @@ export function ParticipantsList() {
   const divisionColors = {
     MALE: { text: 'text-red-400', bg: 'bg-red-500/20' },
     FEMALE: { text: 'text-purple-400', bg: 'bg-purple-500/20' },
-    LIGA: { text: 'text-emerald-400', bg: 'bg-emerald-500/20' },
   };
 
   // Loading skeleton

@@ -7,7 +7,7 @@ import { db } from '@/lib/db';
 // TYPES
 // ============================================
 
-export type Division = 'MALE' | 'FEMALE' | 'LIGA';
+export type Division = 'MALE' | 'FEMALE';
 export type BracketType = 'SINGLE_ELIMINATION' | 'DOUBLE_ELIMINATION' | 'ROUND_ROBIN' | 'GROUP_STAGE' | 'SWISS' | 'PLAYOFF';
 export type TournamentStatus = 'SETUP' | 'REGISTRATION' | 'APPROVAL' | 'TEAM_GENERATION' | 'BRACKET_GENERATION' | 'IN_PROGRESS' | 'FINALIZATION' | 'COMPLETED' | 'CANCELLED';
 export type Tier = 'S' | 'A' | 'B';
@@ -226,8 +226,8 @@ export async function generateTeams(tournamentId: string): Promise<TeamCompositi
   let tierA = participants.filter((p) => p.tier === 'A');
   let tierB = participants.filter((p) => p.tier === 'B');
 
-  // Calculate number of teams (3 players per team for Male/Female, 5 for Liga)
-  const teamSize = tournament.division === 'LIGA' ? 5 : 3;
+  // Calculate number of teams (3 players per team)
+  const teamSize = 3;
   const numTeams = Math.floor(participants.length / teamSize);
 
   const teams: TeamComposition[] = [];
@@ -235,45 +235,36 @@ export async function generateTeams(tournamentId: string): Promise<TeamCompositi
   for (let i = 0; i < numTeams; i++) {
     const teamMembers: { id: string; name: string; tier: Tier }[] = [];
 
-    // Pick one from each tier if available (for Male/Female)
-    if (tournament.division !== 'LIGA') {
-      // Try to pick from S tier
+    // Pick one from each tier if available
+    // Try to pick from S tier
+    if (tierS.length > 0) {
+      const idx = Math.floor(Math.random() * tierS.length);
+      teamMembers.push(tierS.splice(idx, 1)[0]);
+    }
+    // Try to pick from A tier
+    if (tierA.length > 0 && teamMembers.length < teamSize) {
+      const idx = Math.floor(Math.random() * tierA.length);
+      teamMembers.push(tierA.splice(idx, 1)[0]);
+    }
+    // Try to pick from B tier
+    if (tierB.length > 0 && teamMembers.length < teamSize) {
+      const idx = Math.floor(Math.random() * tierB.length);
+      teamMembers.push(tierB.splice(idx, 1)[0]);
+    }
+    
+    // Fill remaining slots from any available tier
+    while (teamMembers.length < teamSize) {
       if (tierS.length > 0) {
         const idx = Math.floor(Math.random() * tierS.length);
         teamMembers.push(tierS.splice(idx, 1)[0]);
-      }
-      // Try to pick from A tier
-      if (tierA.length > 0 && teamMembers.length < teamSize) {
+      } else if (tierA.length > 0) {
         const idx = Math.floor(Math.random() * tierA.length);
         teamMembers.push(tierA.splice(idx, 1)[0]);
-      }
-      // Try to pick from B tier
-      if (tierB.length > 0 && teamMembers.length < teamSize) {
+      } else if (tierB.length > 0) {
         const idx = Math.floor(Math.random() * tierB.length);
         teamMembers.push(tierB.splice(idx, 1)[0]);
-      }
-      
-      // Fill remaining slots from any available tier
-      while (teamMembers.length < teamSize) {
-        if (tierS.length > 0) {
-          const idx = Math.floor(Math.random() * tierS.length);
-          teamMembers.push(tierS.splice(idx, 1)[0]);
-        } else if (tierA.length > 0) {
-          const idx = Math.floor(Math.random() * tierA.length);
-          teamMembers.push(tierA.splice(idx, 1)[0]);
-        } else if (tierB.length > 0) {
-          const idx = Math.floor(Math.random() * tierB.length);
-          teamMembers.push(tierB.splice(idx, 1)[0]);
-        } else {
-          break; // No more participants available
-        }
-      }
-    } else {
-      // For Liga, teams are pre-formed (clubs)
-      // Just assign remaining participants
-      for (let j = 0; j < teamSize && participants.length > 0; j++) {
-        const idx = Math.floor(Math.random() * participants.length);
-        teamMembers.push(participants.splice(idx, 1)[0] as typeof teamMembers[0]);
+      } else {
+        break; // No more participants available
       }
     }
 
