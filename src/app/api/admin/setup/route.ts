@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { Prisma } from '@prisma/client';
 
 // GET /api/admin/setup - Check database and create admin
 export async function GET() {
@@ -59,12 +60,24 @@ export async function GET() {
         });
         logs.push(`✅ Created admin: ${JSON.stringify({ id: admin.id, name: admin.name, role: admin.role })}`);
       } catch (createError) {
+        // Check if it's a table doesn't exist error
+        const errorMsg = createError instanceof Error ? createError.message : '';
+        if (errorMsg.includes('does not exist') || errorMsg.includes('relation')) {
+          logs.push(`❌ Table doesn't exist! Need to run prisma db push`);
+          return NextResponse.json({
+            success: false,
+            error: 'Database tables not found. Please run: npx prisma db push',
+            logs,
+            details: errorMsg,
+            needsMigration: true,
+          }, { status: 500 });
+        }
         logs.push(`❌ Error creating user: ${createError}`);
         return NextResponse.json({
           success: false,
           error: 'Failed to create admin user',
           logs,
-          details: createError instanceof Error ? createError.message : 'Unknown',
+          details: errorMsg,
         }, { status: 500 });
       }
     } else if (admin.role !== 'SUPER_ADMIN') {
