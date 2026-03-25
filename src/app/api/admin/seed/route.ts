@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { Club, User, Tier } from '@prisma/client';
 
 // Male participants (24) - exact names from user
 const maleParticipants = [
@@ -22,7 +23,7 @@ const clubs = [
 ];
 
 const generatePhone = (index: number) => `+6281234567${String(index).padStart(3, '0')}`;
-const assignTier = (): 'S' | 'A' | 'B' => {
+const assignTier = (): Tier => {
   const rand = Math.random();
   if (rand < 0.2) return 'S';
   if (rand < 0.5) return 'A';
@@ -38,7 +39,7 @@ export async function POST(request: NextRequest) {
     });
 
     // 1. Create Clubs
-    const createdClubs = [];
+    const createdClubs: Club[] = [];
     for (let i = 0; i < clubs.length; i++) {
       const club = await db.club.create({
         data: {
@@ -51,7 +52,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Create Male Participants
-    const maleUsers = [];
+    const maleUsers: User[] = [];
     for (let i = 0; i < maleParticipants.length; i++) {
       const user = await db.user.create({
         data: {
@@ -65,7 +66,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 3. Create Female Participants
-    const femaleUsers = [];
+    const femaleUsers: User[] = [];
     for (let i = 0; i < femaleParticipants.length; i++) {
       const user = await db.user.create({
         data: {
@@ -87,7 +88,7 @@ export async function POST(request: NextRequest) {
           data: {
             clubId: randomClub.id,
             userId: user.id,
-            role: Math.random() < 0.2 ? 'LEADER' : 'MEMBER',
+            role: Math.random() < 0.2 ? 'ADMIN' : 'MEMBER',
           },
         });
       }
@@ -128,7 +129,7 @@ export async function POST(request: NextRequest) {
           tournamentId: maleTournament.id,
           userId: user.id,
           division: 'MALE',
-          tier: user.tier as 'S' | 'A' | 'B',
+          tier: user.tier as Tier,
           status: 'APPROVED',
         },
       });
@@ -169,7 +170,7 @@ export async function POST(request: NextRequest) {
           tournamentId: femaleTournament.id,
           userId: user.id,
           division: 'FEMALE',
-          tier: user.tier as 'S' | 'A' | 'B',
+          tier: user.tier as Tier,
           status: 'APPROVED',
         },
       });
@@ -204,40 +205,76 @@ export async function DELETE(request: NextRequest) {
 
     // Delete in correct order (respecting foreign keys)
     
-    // 1. Delete bracket matches
-    await db.bracketMatch.deleteMany({});
+    // 1. Delete match results
+    await db.matchResult.deleteMany({});
     
-    // 2. Delete brackets
+    // 2. Delete matches
+    await db.match.deleteMany({});
+    
+    // 3. Delete group members
+    await db.groupMember.deleteMany({});
+    
+    // 4. Delete groups
+    await db.group.deleteMany({});
+    
+    // 5. Delete brackets
     await db.bracket.deleteMany({});
     
-    // 3. Delete teams
+    // 6. Delete team members
+    await db.teamMember.deleteMany({});
+    
+    // 7. Delete teams
     await db.team.deleteMany({});
     
-    // 4. Delete registrations
+    // 8. Delete registrations
     await db.registration.deleteMany({});
     
-    // 5. Delete saweran
+    // 9. Delete saweran
     await db.saweran.deleteMany({});
     
-    // 6. Delete donations
+    // 10. Delete donations
     await db.donation.deleteMany({});
     
-    // 7. Delete prize pools
+    // 11. Delete prize pools
     await db.prizePool.deleteMany({});
     
-    // 8. Delete champions
+    // 12. Delete champions
     await db.champion.deleteMany({});
     
-    // 9. Delete tournaments
+    // 13. Delete tournaments
     await db.tournament.deleteMany({});
     
-    // 10. Delete club members
+    // 14. Delete club members
     await db.clubMember.deleteMany({});
     
-    // 11. Delete clubs
+    // 15. Delete clubs
     await db.club.deleteMany({});
     
-    // 12. Delete users except super admin
+    // 16. Delete OTP codes
+    await db.oTPCode.deleteMany({});
+    
+    // 17. Delete notifications
+    await db.notification.deleteMany({});
+    
+    // 18. Delete global ranks
+    await db.globalRank.deleteMany({});
+    
+    // 19. Delete player stats
+    await db.playerStats.deleteMany({});
+    
+    // 20. Delete match history
+    await db.matchHistory.deleteMany({});
+    
+    // 21. Delete user achievements
+    await db.userAchievement.deleteMany({});
+    
+    // 22. Delete MVP awards
+    await db.mVPAward.deleteMany({});
+    
+    // 23. Delete user admin profiles
+    await db.userAdminProfile.deleteMany({});
+    
+    // 24. Delete users except super admin
     if (superAdmin) {
       await db.user.deleteMany({
         where: {
