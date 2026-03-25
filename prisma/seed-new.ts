@@ -2,7 +2,7 @@
 // Run with: bunx prisma db seed
 // Or use the admin panel button
 
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Tier, Club, User } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -30,7 +30,7 @@ const clubs = [
 const generatePhone = (index: number) => `+6281234567${String(index).padStart(3, '0')}`;
 
 // Helper to assign random tier
-const assignTier = (): 'S' | 'A' | 'B' => {
+const assignTier = (): Tier => {
   const rand = Math.random();
   if (rand < 0.2) return 'S';
   if (rand < 0.5) return 'A';
@@ -55,7 +55,7 @@ async function main() {
 
   // 2. Create Clubs
   console.log('\n📁 Creating clubs...');
-  const createdClubs = [];
+  const createdClubs: Club[] = [];
   for (let i = 0; i < clubs.length; i++) {
     const club = await prisma.club.create({
       data: {
@@ -71,7 +71,7 @@ async function main() {
 
   // 3. Create Male Participants
   console.log('\n👨 Creating male participants...');
-  const maleUsers = [];
+  const maleUsers: User[] = [];
   for (let i = 0; i < maleParticipants.length; i++) {
     const user = await prisma.user.create({
       data: {
@@ -88,7 +88,7 @@ async function main() {
 
   // 4. Create Female Participants
   console.log('\n👩 Creating female participants...');
-  const femaleUsers = [];
+  const femaleUsers: User[] = [];
   for (let i = 0; i < femaleParticipants.length; i++) {
     const user = await prisma.user.create({
       data: {
@@ -115,7 +115,7 @@ async function main() {
         data: {
           clubId: randomClub.id,
           userId: user.id,
-          role: Math.random() < 0.2 ? 'LEADER' : 'MEMBER',
+          role: Math.random() < 0.2 ? 'ADMIN' : 'MEMBER',
         },
       });
       clubAssignments++;
@@ -193,7 +193,7 @@ async function main() {
         tournamentId: maleTournament.id,
         userId: user.id,
         division: 'MALE',
-        tier: user.tier as 'S' | 'A' | 'B',
+        tier: user.tier as Tier,
         status: 'APPROVED',
       },
     });
@@ -212,7 +212,7 @@ async function main() {
         tournamentId: femaleTournament.id,
         userId: user.id,
         division: 'FEMALE',
-        tier: user.tier as 'S' | 'A' | 'B',
+        tier: user.tier as Tier,
         status: 'APPROVED',
       },
     });
