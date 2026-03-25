@@ -28,15 +28,12 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // TODO: Send OTP via WhatsApp using Baileys or WhatsApp Cloud API
-    // For now, we'll just return the OTP for testing
     console.log(`OTP for ${phone}: ${otp}`);
 
     return NextResponse.json({
       success: true,
       message: 'OTP sent successfully',
-      // In production, remove this:
-      debug: { otp }, // Remove in production
+      debug: { otp },
     });
   } catch (error) {
     console.error('Error sending OTP:', error);
@@ -53,7 +50,6 @@ export async function PUT(request: NextRequest) {
     const body = await request.json();
     const { phone, otp } = body;
 
-    // Find valid OTP
     const otpRecord = await db.oTPCode.findFirst({
       where: {
         phone,
@@ -71,13 +67,11 @@ export async function PUT(request: NextRequest) {
       );
     }
 
-    // Mark OTP as used
     await db.oTPCode.update({
       where: { id: otpRecord.id },
       data: { used: true },
     });
 
-    // Find or create user
     let user = await db.user.findUnique({
       where: { phone },
     });
@@ -93,7 +87,6 @@ export async function PUT(request: NextRequest) {
       });
     }
 
-    // Update last login
     await db.user.update({
       where: { id: user.id },
       data: { lastLoginAt: new Date() },
@@ -118,46 +111,42 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-// Admin Login - Using username and password (NO DATABASE REQUIRED)
+// Admin Login - Using username and password
+// IMPORTANT: This requires database to ensure data integrity
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
     const { username, password } = body;
 
-    console.log('Admin login attempt:', { username, password });
+    console.log('=== Admin Login Attempt ===');
+    console.log('Username:', username);
+    console.log('Password length:', password?.length);
 
-    // Admin credentials - hardcoded for reliability
+    // Admin credentials
     const ADMIN_USERNAME = 'tazos';
     const ADMIN_PASSWORD = 'tazevsta';
 
-    // Simple credential check
+    // Check credentials first
     if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
-      console.log('Admin login failed: wrong credentials');
+      console.log('❌ Wrong credentials');
       return NextResponse.json(
         { success: false, error: 'Username atau password salah' },
         { status: 401 }
       );
     }
 
-    console.log('Admin login successful!');
+    console.log('✅ Credentials correct, connecting to database...');
 
-    // Return success with admin user data - NO DATABASE NEEDED
-    // This ensures login works even if database has issues
-    const adminUser = {
-      id: 'admin-tazos-001',
-      name: 'Tazos Admin',
-      phone: '+6281349924210',
-      role: 'SUPER_ADMIN',
-      avatar: null,
-    };
-
-    // Try to sync with database in background (non-blocking)
-    // This is optional and won't affect login success
+    // Find or create admin user in database
+    // This is REQUIRED for data integrity - tournaments need valid user IDs
+    const adminPhone = '+6281349924210';
+    
+    let user;
     try {
-      const adminPhone = '+6281349924210';
-      let user = await db.user.findUnique({
+      user = await db.user.findUnique({
         where: { phone: adminPhone },
       });
+      console.log('Existing user:', user ? user.id : 'Not found');
 
       if (!user) {
         user = await db.user.create({
@@ -168,40 +157,40 @@ export async function PATCH(request: NextRequest) {
             tier: 'S',
           },
         });
-        console.log('Created admin user in database:', user.id);
+        console.log('✅ Created new admin user:', user.id);
       } else if (user.role !== 'SUPER_ADMIN') {
         user = await db.user.update({
           where: { id: user.id },
           data: { role: 'SUPER_ADMIN', tier: 'S', name: 'Tazos Admin' },
         });
-        console.log('Updated admin user in database:', user.id);
-      }
-
-      // Return the database user if available
-      if (user) {
-        return NextResponse.json({
-          success: true,
-          data: {
-            id: user.id,
-            name: user.name,
-            phone: user.phone,
-            role: user.role,
-            avatar: user.avatar,
-          },
-        });
+        console.log('✅ Updated admin user:', user.id);
       }
     } catch (dbError) {
-      // Database error - but we still return success with hardcoded admin
-      console.log('Database sync failed, using hardcoded admin:', dbError);
+      console.error('❌ Database error:', dbError);
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Database connection failed. Please try again or contact support.',
+          debug: process.env.NODE_ENV === 'development' ? String(dbError) : undefined
+        },
+        { status: 500 }
+      );
     }
 
-    // Return hardcoded admin user
+    console.log('✅ Admin login successful:', user.id);
+
     return NextResponse.json({
       success: true,
-      data: adminUser,
+      data: {
+        id: user.id,
+        name: user.name,
+        phone: user.phone,
+        role: user.role,
+        avatar: user.avatar,
+      },
     });
   } catch (error) {
-    console.error('Error during admin login:', error);
+    console.error('❌ Unexpected error during admin login:', error);
     return NextResponse.json(
       { success: false, error: 'Login gagal - server error' },
       { status: 500 }
