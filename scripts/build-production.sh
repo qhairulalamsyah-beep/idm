@@ -1,38 +1,35 @@
 #!/bin/bash
-# ===========================================
-# Idol Meta Tournament - Production Build Script
-# ===========================================
 
-set -e
+# Build script for Vercel deployment
+# Swaps Prisma schema to PostgreSQL for production
 
 echo "🚀 Starting production build..."
 
-# Check if .env.production exists
-if [ ! -f .env.production ]; then
-    echo "⚠️  .env.production not found!"
-    echo "📋 Creating .env.production from template..."
-    cp .env.production.example .env.production
-    echo "📝 Please edit .env.production with your production values"
-    echo "❌ Build aborted. Configure .env.production and run again."
-    exit 1
+# Check if we're in production
+if [ "$NODE_ENV" = "production" ] || [ -n "$VERCEL" ]; then
+  echo "📦 Production build detected - using PostgreSQL schema"
+  
+  # Backup SQLite schema
+  cp prisma/schema.prisma prisma/schema.sqlite.bak
+  
+  # Copy PostgreSQL schema
+  cp prisma/schema.postgresql.prisma prisma/schema.prisma
+  
+  echo "✅ Switched to PostgreSQL schema"
 fi
 
-# Load production environment
-export $(grep -v '^#' .env.production | xargs)
-
-echo "📦 Installing dependencies..."
-bun install --frozen-lockfile
-
-echo "🔧 Generating Prisma Client..."
+# Generate Prisma client
+echo "🔧 Generating Prisma client..."
 bunx prisma generate
 
-echo "🏗️  Building Next.js application..."
-bun run build
+# Push schema to database (creates tables if needed)
+if [ -n "$DATABASE_URL" ] && [[ "$DATABASE_URL" == postgres* ]]; then
+  echo "📊 Pushing schema to PostgreSQL database..."
+  bunx prisma db push --accept-data-loss || echo "⚠️ db push failed, continuing..."
+fi
 
-echo "✅ Build completed successfully!"
-echo ""
-echo "📋 Next steps:"
-echo "1. Set up your PostgreSQL database"
-echo "2. Run database migrations: bunx prisma migrate deploy"
-echo "3. Seed Super Admin: bun run scripts/seed-super-admin.ts"
-echo "4. Start production server: bun run start"
+# Build Next.js
+echo "🏗️ Building Next.js application..."
+bun next build
+
+echo "✅ Build completed!"

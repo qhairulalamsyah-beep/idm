@@ -12,7 +12,7 @@
  * 7. Scan QR Code dengan WhatsApp
  */
 
-import { makeWASocket, DisconnectReason, useMultiFileAuthState } from '@whiskeysockets/baileys'
+import { makeWASocket, DisconnectReason, useMultiFileAuthState as getAuthState } from '@whiskeysockets/baileys'
 import pino from 'pino'
 import qrcode from 'qrcode-terminal'
 import { Boom } from '@hapi/boom'
@@ -585,7 +585,7 @@ async function handleMessage(from, message, senderName, isGroup) {
 
 async function startBot() {
   // Use auth state for session persistence
-  const { state, saveCreds } = await useMultiFileAuthState('./auth_info')
+  const { state, saveCreds } = await getAuthState('./auth_info')
   
   // Create socket connection
   const sock = makeWASocket({
