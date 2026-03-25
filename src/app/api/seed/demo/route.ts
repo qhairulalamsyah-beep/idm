@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     // Get super admin
     const superAdmin = await db.user.findFirst({ where: { role: 'SUPER_ADMIN' } });
     
-    // Clear all data first (with error handling for each)
+    // Clear all data first
     try { await db.champion.deleteMany(); } catch {}
     try { await db.matchResult.deleteMany(); } catch {}
     try { await db.match.deleteMany(); } catch {}
@@ -53,8 +53,38 @@ export async function POST(request: NextRequest) {
       await db.user.deleteMany({ where: { role: 'PARTICIPANT' } });
     }
 
-    // Create tournament
-    const tournament = await db.tournament.create({
+    // ============================================
+    // MALE DIVISION - 24 Participants
+    // ============================================
+    const maleParticipants = [
+      { name: 'Tazos', tier: Tier.S },
+      { name: 'Bambang', tier: Tier.S },
+      { name: 'Arthur', tier: Tier.S },
+      { name: 'Sting', tier: Tier.S },
+      { name: 'Helix', tier: Tier.S },
+      { name: 'Afroki', tier: Tier.S },
+      { name: 'Ipiin', tier: Tier.A },
+      { name: 'Ren', tier: Tier.A },
+      { name: 'Earth', tier: Tier.A },
+      { name: 'Predator', tier: Tier.A },
+      { name: 'Zeth', tier: Tier.A },
+      { name: 'Marimo', tier: Tier.A },
+      { name: 'Kageno', tier: Tier.A },
+      { name: 'Janskie', tier: Tier.A },
+      { name: 'Vriskey', tier: Tier.A },
+      { name: 'Zmz', tier: Tier.B },
+      { name: 'VarnceS', tier: Tier.B },
+      { name: 'Mobtiel', tier: Tier.B },
+      { name: 'Gunnery', tier: Tier.B },
+      { name: 'Life', tier: Tier.B },
+      { name: 'Zico', tier: Tier.B },
+      { name: 'Chiko', tier: Tier.B },
+      { name: 'Rivaldo', tier: Tier.B },
+      { name: 'Afi', tier: Tier.B },
+    ];
+
+    // Create Male Tournament
+    const maleTournament = await db.tournament.create({
       data: {
         name: 'Tarkam Male #1',
         division: Division.MALE,
@@ -63,16 +93,17 @@ export async function POST(request: NextRequest) {
         bracketType: BracketType.SINGLE_ELIMINATION,
         status: 'REGISTRATION',
         maxParticipants: 24,
-        currentParticipants: 23,
+        currentParticipants: maleParticipants.length,
         startDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         location: 'GR Arena Mall X',
+        rules: 'Dilarang menggunakan BOT atau cheat\nPeserta wajib hadir 15 menit sebelum pertandingan\nTim yang tidak hadir otomatis dianggap walkover\nKeputusan juri bersifat mutlak\nDilarang melakukan toxic behavior',
       },
     });
 
-    // Prize pool
+    // Male Prize Pool
     await db.prizePool.create({
       data: {
-        tournamentId: tournament.id,
+        tournamentId: maleTournament.id,
         championAmount: 500000,
         runnerUpAmount: 250000,
         thirdPlaceAmount: 100000,
@@ -81,39 +112,13 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // 23 Male Participants - exact names from user
-    const participants = [
-      { name: 'Tazos', tier: Tier.S },
-      { name: 'Bambang', tier: Tier.S },
-      { name: 'Arthur', tier: Tier.S },
-      { name: 'Sting', tier: Tier.S },
-      { name: 'Ipiin', tier: Tier.A },
-      { name: 'Ren', tier: Tier.A },
-      { name: 'Earth', tier: Tier.A },
-      { name: 'Kira', tier: Tier.A },
-      { name: 'Predator', tier: Tier.A },
-      { name: 'Zmz', tier: Tier.B },
-      { name: 'VarnceS', tier: Tier.B },
-      { name: 'Zeth', tier: Tier.B },
-      { name: 'Zico', tier: Tier.B },
-      { name: 'Montiel', tier: Tier.B },
-      { name: 'Gunnery', tier: Tier.B },
-      { name: 'Afroki', tier: Tier.S },
-      { name: 'Marimo', tier: Tier.A },
-      { name: 'Oura', tier: Tier.B },
-      { name: 'Georgie', tier: Tier.B },
-      { name: 'Rivaldo', tier: Tier.B },
-      { name: 'Astro', tier: Tier.B },
-      { name: 'Ciko', tier: Tier.B },
-      { name: 'TestPlayer', tier: Tier.B }, // 23rd player
-    ];
-
-    for (let i = 0; i < participants.length; i++) {
-      const p = participants[i];
+    // Create Male Participants
+    for (let i = 0; i < maleParticipants.length; i++) {
+      const p = maleParticipants[i];
       
       const user = await db.user.create({
         data: {
-          phone: `+62812340000${i.toString().padStart(2, '0')}`,
+          phone: `+62812340${i.toString().padStart(4, '0')}`,
           name: p.name,
           tier: p.tier,
           role: 'PARTICIPANT',
@@ -124,7 +129,7 @@ export async function POST(request: NextRequest) {
 
       await db.registration.create({
         data: {
-          tournamentId: tournament.id,
+          tournamentId: maleTournament.id,
           userId: user.id,
           division: Division.MALE,
           status: 'APPROVED',
@@ -145,47 +150,140 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Club
-    const club = await db.club.create({ 
-      data: { 
-        name: 'Alpha Squad', 
-        totalPoints: 5000 
-      } 
+    // ============================================
+    // FEMALE DIVISION - 18 Participants
+    // ============================================
+    const femaleParticipants = [
+      { name: 'Evony', tier: Tier.S },
+      { name: 'Vion', tier: Tier.S },
+      { name: 'Cheeyaqq', tier: Tier.S },
+      { name: 'Skylin', tier: Tier.S },
+      { name: 'Indi', tier: Tier.A },
+      { name: 'Veronics', tier: Tier.A },
+      { name: 'Moy', tier: Tier.A },
+      { name: 'Metry', tier: Tier.A },
+      { name: 'Aitan', tier: Tier.A },
+      { name: 'Cikiw', tier: Tier.A },
+      { name: 'Irazz', tier: Tier.B },
+      { name: 'Yaay', tier: Tier.B },
+      { name: 'Reptil', tier: Tier.B },
+      { name: 'Dysa', tier: Tier.B },
+      { name: 'Arcalya', tier: Tier.B },
+      { name: 'Cami', tier: Tier.B },
+      { name: 'Iparmaut', tier: Tier.B },
+      { name: 'Weywey', tier: Tier.B },
+    ];
+
+    // Create Female Tournament
+    const femaleTournament = await db.tournament.create({
+      data: {
+        name: 'Tarkam Female #1',
+        division: Division.FEMALE,
+        mode: 'GR Arena 3vs3',
+        bpm: 'Random 120-140',
+        bracketType: BracketType.SINGLE_ELIMINATION,
+        status: 'REGISTRATION',
+        maxParticipants: 24,
+        currentParticipants: femaleParticipants.length,
+        startDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        location: 'GR Arena Mall X',
+        rules: 'Dilarang menggunakan BOT atau cheat\nPeserta wajib hadir 15 menit sebelum pertandingan\nTim yang tidak hadir otomatis dianggap walkover\nKeputusan juri bersifat mutlak\nDilarang melakukan toxic behavior',
+      },
     });
-    
-    const clubUsers = await db.user.findMany({ 
-      where: { name: { in: ['Tazos', 'Arthur', 'Sting', 'Ipiin', 'Ren'] } } 
+
+    // Female Prize Pool
+    await db.prizePool.create({
+      data: {
+        tournamentId: femaleTournament.id,
+        championAmount: 500000,
+        runnerUpAmount: 250000,
+        thirdPlaceAmount: 100000,
+        mvpAmount: 50000,
+        totalAmount: 900000,
+      },
     });
-    
-    for (const u of clubUsers) {
-      await db.clubMember.create({ 
-        data: { 
-          clubId: club.id, 
-          userId: u.id, 
-          role: u.name === 'Tazos' ? 'OWNER' : 'MEMBER' 
-        } 
+
+    // Create Female Participants
+    for (let i = 0; i < femaleParticipants.length; i++) {
+      const p = femaleParticipants[i];
+      
+      const user = await db.user.create({
+        data: {
+          phone: `+62812341${i.toString().padStart(4, '0')}`,
+          name: p.name,
+          tier: p.tier,
+          role: 'PARTICIPANT',
+          points: p.tier === Tier.S ? 1500 : p.tier === Tier.A ? 1000 : 500,
+          isActive: true,
+        },
+      });
+
+      await db.registration.create({
+        data: {
+          tournamentId: femaleTournament.id,
+          userId: user.id,
+          division: Division.FEMALE,
+          status: 'APPROVED',
+          tier: p.tier,
+          approvedBy: superAdmin?.id,
+          approvedAt: new Date(),
+        },
+      });
+
+      await db.globalRank.create({
+        data: {
+          userId: user.id,
+          totalPoints: p.tier === Tier.S ? 1500 : p.tier === Tier.A ? 1000 : 500,
+          wins: Math.floor(Math.random() * 10) + 5,
+          losses: Math.floor(Math.random() * 5),
+          tournaments: Math.floor(Math.random() * 5) + 1,
+        },
       });
     }
 
-    await db.clubRank.create({ 
-      data: { 
-        clubId: club.id, 
-        totalPoints: 5000, 
-        wins: 25, 
-        losses: 5, 
-        tournaments: 10 
-      } 
-    });
+    // ============================================
+    // CLUBS - 8 Clubs
+    // ============================================
+    const clubNames = ['Gymshark', 'Maximous', 'Southern', 'PlatR', 'Paranoid', 'Euphoric', 'Yakuza', 'Sensei'];
+    
+    for (let i = 0; i < clubNames.length; i++) {
+      const club = await db.club.create({
+        data: {
+          name: clubNames[i],
+          totalPoints: Math.floor(Math.random() * 3000) + 2000,
+        },
+      });
+
+      await db.clubRank.create({
+        data: {
+          clubId: club.id,
+          totalPoints: Math.floor(Math.random() * 3000) + 2000,
+          wins: Math.floor(Math.random() * 20) + 10,
+          losses: Math.floor(Math.random() * 10),
+          tournaments: Math.floor(Math.random() * 8) + 2,
+        },
+      });
+    }
 
     return NextResponse.json({ 
       success: true, 
       message: 'Demo data seeded successfully!', 
       data: {
-        tournament: tournament.name,
-        participants: participants.length,
-        sTier: participants.filter(p => p.tier === Tier.S).length,
-        aTier: participants.filter(p => p.tier === Tier.A).length,
-        bTier: participants.filter(p => p.tier === Tier.B).length,
+        maleTournament: maleTournament.name,
+        femaleTournament: femaleTournament.name,
+        maleParticipants: maleParticipants.length,
+        femaleParticipants: femaleParticipants.length,
+        clubs: clubNames.length,
+        maleStats: {
+          sTier: maleParticipants.filter(p => p.tier === Tier.S).length,
+          aTier: maleParticipants.filter(p => p.tier === Tier.A).length,
+          bTier: maleParticipants.filter(p => p.tier === Tier.B).length,
+        },
+        femaleStats: {
+          sTier: femaleParticipants.filter(p => p.tier === Tier.S).length,
+          aTier: femaleParticipants.filter(p => p.tier === Tier.A).length,
+          bTier: femaleParticipants.filter(p => p.tier === Tier.B).length,
+        },
       }
     });
   } catch (error: unknown) {
@@ -200,7 +298,6 @@ export async function POST(request: NextRequest) {
 export async function DELETE() {
   try {
     // Delete in correct order (respecting foreign keys)
-    // Use deleteMany only on tables that exist
     try { await db.champion.deleteMany(); } catch {}
     try { await db.matchResult.deleteMany(); } catch {}
     try { await db.match.deleteMany(); } catch {}
@@ -224,7 +321,7 @@ export async function DELETE() {
       await db.user.deleteMany({ where: { id: { not: sa.id } } });
     }
     
-    return NextResponse.json({ success: true, message: 'All tournament data cleared' });
+    return NextResponse.json({ success: true, message: 'All tournament data cleared successfully' });
   } catch (error: unknown) {
     return NextResponse.json({ 
       success: false, 

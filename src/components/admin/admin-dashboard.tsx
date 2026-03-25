@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Settings,
   Users, Trophy, Calendar, DollarSign,
-  ChevronRight, Plus, Eye, Check, X, RefreshCw, Zap, LayoutDashboard, LogOut, Target, Crown, Medal, Star, Play, Heart, Sparkles, Clock, Menu, ArrowLeft, Bell, Wallet, MapPin, Music, Gamepad2, Shield
+  ChevronRight, Plus, Eye, Check, X, RefreshCw, Zap, LayoutDashboard, LogOut, Target, Crown, Medal, Star, Play, Heart, Sparkles, Clock, Menu, ArrowLeft, Bell, Wallet, MapPin, Music, Gamepad2, Shield, Database, Trash2
 } from 'lucide-react';
 import { useAppStore, Division } from '@/store';
 import { cn } from '@/lib/utils';
@@ -2254,8 +2254,70 @@ function DonationSaweranManagement() {
 
 // Admin Settings Component
 function AdminSettings({ user, onLogout }: { user: { name?: string | null; phone?: string; role?: string } | null; onLogout: () => void }) {
+  const [isLoading, setIsLoading] = useState(false);
+  const [seedInfo, setSeedInfo] = useState<{ tournaments: number; users: number; registrations: number; teams: number; clubs: number } | null>(null);
+
+  useEffect(() => {
+    fetchSeedInfo();
+  }, []);
+
+  const fetchSeedInfo = async () => {
+    try {
+      const res = await fetch('/api/seed/demo');
+      const data = await res.json();
+      if (data.success) {
+        setSeedInfo(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching seed info:', error);
+    }
+  };
+
+  const handleSeedData = async () => {
+    if (!confirm('Ini akan menghapus SEMUA data dan mengisi dengan data demo. Lanjutkan?')) return;
+    
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/seed/demo', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Data berhasil di-seed!');
+        toast.info(`Male: ${data.data.maleParticipants} peserta | Female: ${data.data.femaleParticipants} peserta | Clubs: ${data.data.clubs}`);
+        fetchSeedInfo();
+      } else {
+        toast.error(data.error || 'Gagal seed data');
+      }
+    } catch (error) {
+      toast.error('Gagal seed data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleResetData = async () => {
+    if (!confirm('PERINGATAN: Ini akan menghapus SEMUA data turnamen, peserta, dan club. Lanjutkan?')) return;
+    if (!confirm('Apakah Anda benar-benar yakin? Tindakan ini tidak dapat dibatalkan!')) return;
+    
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/seed/demo', { method: 'DELETE' });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Semua data berhasil dihapus!');
+        fetchSeedInfo();
+      } else {
+        toast.error(data.error || 'Gagal reset data');
+      }
+    } catch (error) {
+      toast.error('Gagal reset data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
+      {/* Info Admin */}
       <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800">
         <h3 className="text-sm font-semibold text-slate-300 mb-3">Info Admin</h3>
         <div className="space-y-2">
@@ -2274,6 +2336,75 @@ function AdminSettings({ user, onLogout }: { user: { name?: string | null; phone
         </div>
       </div>
 
+      {/* Data Stats */}
+      {seedInfo && (
+        <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-800">
+          <h3 className="text-sm font-semibold text-slate-300 mb-3">Statistik Data</h3>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="text-center p-2 rounded-lg bg-slate-800/50">
+              <p className="text-lg font-bold text-cyan-400">{seedInfo.tournaments}</p>
+              <p className="text-xs text-slate-500">Turnamen</p>
+            </div>
+            <div className="text-center p-2 rounded-lg bg-slate-800/50">
+              <p className="text-lg font-bold text-emerald-400">{seedInfo.users}</p>
+              <p className="text-xs text-slate-500">Peserta</p>
+            </div>
+            <div className="text-center p-2 rounded-lg bg-slate-800/50">
+              <p className="text-lg font-bold text-purple-400">{seedInfo.clubs}</p>
+              <p className="text-xs text-slate-500">Clubs</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Seed & Reset Buttons */}
+      <div className="space-y-2">
+        <h3 className="text-sm font-semibold text-slate-300">Data Management</h3>
+        
+        <button
+          onClick={handleSeedData}
+          disabled={isLoading}
+          className={cn(
+            "w-full p-4 rounded-xl border flex items-center justify-center gap-3 transition-all",
+            "bg-gradient-to-r from-cyan-500/10 to-blue-500/10 border-cyan-500/30",
+            "hover:border-cyan-400/50 hover:bg-cyan-500/20",
+            isLoading && "opacity-50 cursor-not-allowed"
+          )}
+        >
+          {isLoading ? (
+            <RefreshCw className="w-5 h-5 text-cyan-400 animate-spin" />
+          ) : (
+            <Database className="w-5 h-5 text-cyan-400" />
+          )}
+          <div className="text-left">
+            <p className="font-medium text-white">Push Data Seed</p>
+            <p className="text-xs text-slate-500">Isi dengan data demo (24 male, 18 female, 8 clubs)</p>
+          </div>
+        </button>
+
+        <button
+          onClick={handleResetData}
+          disabled={isLoading}
+          className={cn(
+            "w-full p-4 rounded-xl border flex items-center justify-center gap-3 transition-all",
+            "bg-gradient-to-r from-red-500/10 to-orange-500/10 border-red-500/30",
+            "hover:border-red-400/50 hover:bg-red-500/20",
+            isLoading && "opacity-50 cursor-not-allowed"
+          )}
+        >
+          {isLoading ? (
+            <RefreshCw className="w-5 h-5 text-red-400 animate-spin" />
+          ) : (
+            <Trash2 className="w-5 h-5 text-red-400" />
+          )}
+          <div className="text-left">
+            <p className="font-medium text-white">Reset Data</p>
+            <p className="text-xs text-slate-500">Hapus semua data turnamen & peserta</p>
+          </div>
+        </button>
+      </div>
+
+      {/* Logout Button */}
       <button
         onClick={onLogout}
         className="w-full p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-center gap-2 text-red-400 hover:bg-red-500/20 transition-all"

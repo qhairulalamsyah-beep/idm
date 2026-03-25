@@ -213,14 +213,13 @@ function HomeContent({ activeDivision }: { activeDivision: string }) {
         }} 
       />
       
-      <div className="mx-4 mt-4">
-        <DonationSaweranUI />
-      </div>
-      
       <div key={`overview-${activeDivision}`}>
         <QuickStats key={`stats-${activeDivision}`} />
         <PrizePool key={`prize-${activeDivision}`} />
         <ParticipantsList key={`participants-${activeDivision}`} />
+        <div className="mx-4 mt-6">
+          <DonationSaweranUI />
+        </div>
         <RulesSection key={`rules-${activeDivision}`} />
       </div>
 
