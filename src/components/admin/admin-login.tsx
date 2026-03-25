@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Lock, Loader2, Sparkles } from 'lucide-react';
+import { User, Lock, Loader2, Sparkles } from 'lucide-react';
 import { useAppStore } from '@/store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -12,12 +12,12 @@ import { cn } from '@/lib/utils';
 
 export function AdminLogin() {
   const { setUser } = useAppStore();
-  const [phone, setPhone] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async () => {
-    if (!phone || !password) {
+    if (!username || !password) {
       toast.error('Isi semua field');
       return;
     }
@@ -27,7 +27,7 @@ export function AdminLogin() {
       const res = await fetch('/api/auth', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone, password }),
+        body: JSON.stringify({ username, password }),
       });
       const data = await res.json();
 
@@ -133,21 +133,21 @@ export function AdminLogin() {
             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-cyan-500/10 to-transparent rounded-tr-3xl" />
             
             <div className="space-y-5">
-              {/* Phone Input */}
+              {/* Username Input */}
               <div>
                 <Label className="text-slate-300 text-xs flex items-center gap-1 mb-2">
-                  <Phone className="w-3 h-3" />
-                  Nomor HP Admin
+                  <User className="w-3 h-3" />
+                  Username
                 </Label>
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500">
-                    <Phone className="w-4 h-4" />
+                    <User className="w-4 h-4" />
                   </div>
                   <Input
-                    type="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+628xxx"
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="tazos"
                     className={cn(
                       "pl-11 h-12 bg-slate-800/50 border-slate-700/50",
                       "text-white placeholder:text-slate-600",
@@ -226,7 +226,7 @@ export function AdminLogin() {
           className="mt-6 text-center"
         >
           <p className="text-xs text-slate-600">
-            Super Admin: <span className="text-cyan-500/70">+6281349924210</span>
+            Super Admin: <span className="text-cyan-500/70">tazos</span>
           </p>
           <div className="flex items-center justify-center gap-2 mt-3">
             <div className="w-8 h-px bg-gradient-to-r from-transparent to-slate-700" />
