@@ -236,11 +236,87 @@ body {
 
 .card-3d {
   transform-style: preserve-3d;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card-3d:hover {
   transform: perspective(1000px) rotateY(2deg) rotateX(2deg) translateZ(10px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* Enhanced 3D Card with Glow */
+.card-3d-glow {
+  transform-style: preserve-3d;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+              box-shadow 0.4s ease;
+  will-change: transform;
+}
+
+.card-3d-glow:hover {
+  transform: perspective(1000px) rotateY(3deg) rotateX(3deg) translateZ(15px) scale(1.02);
+}
+
+/* 3D Card Tilt Effect */
+.card-tilt {
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease;
+}
+
+.card-tilt:hover {
+  transform: perspective(1000px) rotateX(5deg) rotateY(-5deg);
+}
+
+/* 3D Floating Card */
+.card-3d-float {
+  transform-style: preserve-3d;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: card-float 3s ease-in-out infinite;
+}
+
+.card-3d-float:hover {
+  animation-play-state: paused;
+  transform: perspective(1000px) rotateY(2deg) rotateX(2deg) translateZ(20px) scale(1.03);
+}
+
+@keyframes card-float {
+  0%, 100% {
+    transform: perspective(1000px) rotateY(0deg) rotateX(0deg) translateZ(0px);
+  }
+  50% {
+    transform: perspective(1000px) rotateY(1deg) rotateX(1deg) translateZ(5px);
+  }
+}
+
+/* 3D Card with Perspective Shadow */
+.card-3d-shadow {
+  transform-style: preserve-3d;
+  transition: all 0.3s ease;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.card-3d-shadow:hover {
+  transform: perspective(1000px) rotateX(2deg) rotateY(-2deg) translateY(-5px);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.3),
+    0 10px 10px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Glassmorphism 3D Card */
+.glass-3d {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transform-style: preserve-3d;
+  transition: all 0.4s ease;
+}
+
+.glass-3d:hover {
+  transform: perspective(1000px) rotateY(2deg) rotateX(2deg) translateZ(10px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* ============================================

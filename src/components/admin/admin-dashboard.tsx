@@ -997,6 +997,9 @@ function AdminHome({ stats, tournaments, onNavigate, onSelectTournament, onCreat
         </div>
       </div>
 
+      {/* Data Management */}
+      <DataManagement />
+
       {/* Active Tournaments */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
@@ -1057,6 +1060,83 @@ function StatCard({ icon: Icon, value, label, color, highlight, onClick }: {
       <p className="text-lg font-bold text-white">{value}</p>
       <p className="text-[10px] text-slate-500">{label}</p>
     </button>
+  );
+}
+
+// Data Management Component
+function DataManagement() {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSeed = async () => {
+    if (!confirm('Ini akan menambahkan data seed baru (peserta, club, turnamen). Lanjutkan?')) return;
+    
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/admin/seed', { method: 'POST' });
+      const data = await res.json();
+      
+      if (data.success) {
+        toast.success(`Seed data berhasil dibuat! ${data.data.maleParticipants} male, ${data.data.femaleParticipants} female, ${data.data.clubs} clubs`);
+      } else {
+        toast.error(data.error || 'Gagal membuat seed data');
+      }
+    } catch (error) {
+      toast.error('Gagal membuat seed data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleReset = async () => {
+    if (!confirm('⚠️ PERINGATAN: Ini akan menghapus SEMUA data kecuali super admin!\n\nLanjutkan?')) return;
+    if (!confirm('⚠️ Anda yakin? Tindakan ini TIDAK DAPAT dibatalkan!')) return;
+    
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/admin/seed', { method: 'DELETE' });
+      const data = await res.json();
+      
+      if (data.success) {
+        toast.success('Semua data berhasil direset!');
+      } else {
+        toast.error(data.error || 'Gagal reset data');
+      }
+    } catch (error) {
+      toast.error('Gagal reset data');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="space-y-2">
+      <h3 className="text-sm font-semibold text-slate-400 flex items-center gap-2">
+        <Database className="w-4 h-4" />
+        Data Management
+      </h3>
+      <div className="grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          onClick={handleSeed}
+          disabled={isLoading}
+          className="p-4 rounded-xl bg-gradient-to-br from-emerald-500/20 to-teal-500/10 border border-emerald-500/30 text-left hover:border-emerald-400/50 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Sparkles className="w-6 h-6 text-emerald-400 mb-2" />
+          <p className="font-medium text-white text-sm">Push Seed</p>
+          <p className="text-xs text-slate-500">Tambah Data</p>
+        </button>
+        <button
+          type="button"
+          onClick={handleReset}
+          disabled={isLoading}
+          className="p-4 rounded-xl bg-gradient-to-br from-red-500/20 to-rose-500/10 border border-red-500/30 text-left hover:border-red-400/50 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <Trash2 className="w-6 h-6 text-red-400 mb-2" />
+          <p className="font-medium text-white text-sm">Reset Data</p>
+          <p className="text-xs text-slate-500">Hapus Semua</p>
+        </button>
+      </div>
+    </div>
   );
 }
 

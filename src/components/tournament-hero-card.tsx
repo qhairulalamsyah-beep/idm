@@ -254,7 +254,7 @@ export function TournamentHeroCard({ onOpenDonation, onOpenBracket }: Tournament
           "bg-gradient-to-br",
           theme.gradient,
           theme.cardBorder,
-          "shine-effect"
+          "shine-effect card-3d-glow"
         )}
         style={{
           boxShadow: `0 0 30px ${theme.neonColor}20`,

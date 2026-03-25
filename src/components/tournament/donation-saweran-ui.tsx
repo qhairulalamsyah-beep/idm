@@ -287,32 +287,6 @@ function SaweranContent({
         </div>
       </div>
 
-      {/* Saweran List - shown below the card */}
-      {saweran.length > 0 && (
-        <div className="p-4 rounded-xl bg-slate-900/50 border border-slate-700">
-          <h4 className="text-sm font-semibold text-slate-300 mb-3 flex items-center gap-2">
-            <Users className="w-4 h-4 text-emerald-400" />
-            Penyawer Pekan Ini
-          </h4>
-          <div className="space-y-2 max-h-40 overflow-y-auto">
-            {saweran.slice(0, 5).map((item) => (
-              <div key={item.id} className="flex items-center justify-between py-2 border-b border-slate-800 last:border-0">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm font-bold">
-                    {item.name.charAt(0).toUpperCase()}
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-white">{item.name}</p>
-                    <p className="text-xs text-slate-500">{formatDate(item.createdAt)}</p>
-                  </div>
-                </div>
-                <p className="text-sm font-bold text-emerald-400">{formatCurrency(item.amount)}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
       <DonationModal
         isOpen={showModal}
         onClose={() => setShowModal(false)}

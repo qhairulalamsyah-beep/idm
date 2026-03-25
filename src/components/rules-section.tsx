@@ -66,7 +66,8 @@ export function RulesSection() {
         className={cn(
           "rounded-xl border p-4",
           "bg-gradient-to-br from-slate-900/90 to-slate-800/50",
-          theme.cardBorder
+          theme.cardBorder,
+          "card-3d"
         )}
       >
         {isLoading ? (

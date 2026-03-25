@@ -19,6 +19,7 @@ import { AdminDashboard } from '@/components/admin/admin-dashboard';
 import { InteractiveBracket } from '@/components/tournament/interactive-bracket';
 import { ClubManagement } from '@/components/tournament/club-management';
 import { DonationSaweranUI } from '@/components/tournament/donation-saweran-ui';
+import { SaweranList } from '@/components/tournament/saweran-list';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -212,6 +213,9 @@ function HomeContent({ activeDivision }: { activeDivision: string }) {
           setShowDonation(true);
         }} 
       />
+      
+      {/* Saweran List - below hero */}
+      <SaweranList key={`saweran-${activeDivision}`} />
       
       <div key={`overview-${activeDivision}`}>
         <QuickStats key={`stats-${activeDivision}`} />

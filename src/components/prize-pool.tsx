@@ -210,7 +210,8 @@ export function PrizePool() {
         className={cn(
           "rounded-xl border p-4",
           "bg-gradient-to-br from-slate-900/90 to-slate-800/50",
-          accentColors[activeDivision].border
+          accentColors[activeDivision].border,
+          "card-3d"
         )}
         style={{
           boxShadow: `0 0 20px ${accentColors[activeDivision].glow}`,
