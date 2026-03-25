@@ -1,0 +1,10 @@
+{
+  "name": "whatsapp-bot-service",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot index.ts",
+    "start": "bun run index.ts"
+  },
+  "dependencies": {}
+}

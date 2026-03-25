@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: idm-whatsapp-bot
+    env: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: API_BASE
+        value: https://your-vercel-app.vercel.app
+        # Ganti dengan URL Vercel Anda
+      - key: NODE_ENV
+        value: production

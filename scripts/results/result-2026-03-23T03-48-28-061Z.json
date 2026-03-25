@@ -1,0 +1,242 @@
+[
+  {
+    "mode": "SINGLE",
+    "status": "SUCCESS",
+    "matches": [
+      {
+        "matchId": "cmn2nbewt0192lvil90bwath5",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 2",
+        "scoreA": 4,
+        "scoreB": 10
+      },
+      {
+        "matchId": "cmn2nbeww019clviloygmpmds",
+        "round": 1,
+        "homeTeam": "Team 3",
+        "awayTeam": "Team 4",
+        "scoreA": 4,
+        "scoreB": 4
+      }
+    ],
+    "champion": {
+      "teamId": "cmn2nbevz017jlvilo39rwuz2",
+      "teamName": "Team 4",
+      "members": [
+        "TestPlayer_8_1774237697665",
+        "TestPlayer_10_1774237697901",
+        "TestPlayer_15_1774237698468"
+      ]
+    },
+    "tournament": {
+      "id": "cmn2nbca90126lvilmtuullif",
+      "name": "Auto-Test SINGLE 1774237696451",
+      "division": "MALE"
+    },
+    "error": null,
+    "startedAt": "2026-03-23T03:48:16.450Z",
+    "finishedAt": "2026-03-23T03:48:22.839Z",
+    "duration": 6389
+  },
+  {
+    "mode": "DOUBLE",
+    "status": "SUCCESS",
+    "matches": [
+      {
+        "matchId": "cmn2nbf1301aylvilno9f5nww",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 2",
+        "scoreA": 10,
+        "scoreB": 4
+      },
+      {
+        "matchId": "cmn2nbf1701b0lviln1ppo1qa",
+        "round": 1,
+        "homeTeam": "Team 3",
+        "awayTeam": "Team 4",
+        "scoreA": 8,
+        "scoreB": 6
+      }
+    ],
+    "champion": {
+      "teamId": "cmn2nbf0201aelvilmdbvapb4",
+      "teamName": "Team 3",
+      "members": [
+        "TestPlayer_10_1774237697901",
+        "TestPlayer_11_1774237698016",
+        "TestPlayer_12_1774237698131"
+      ]
+    },
+    "tournament": {
+      "id": "cmn2nbc9z0123lvilmo7ynovs",
+      "name": "Auto-Test DOUBLE 1774237696452",
+      "division": "MALE"
+    },
+    "error": null,
+    "startedAt": "2026-03-23T03:48:16.452Z",
+    "finishedAt": "2026-03-23T03:48:23.955Z",
+    "duration": 7503
+  },
+  {
+    "mode": "ROUND_ROBIN",
+    "status": "SUCCESS",
+    "matches": [
+      {
+        "matchId": "cmn2nbewn018qlvilvy4qy33g",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 2",
+        "scoreA": 6,
+        "scoreB": 2
+      },
+      {
+        "matchId": "cmn2nbewq018ulvildu9wr6of",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 3",
+        "scoreA": 9,
+        "scoreB": 9
+      },
+      {
+        "matchId": "cmn2nbews0190lvilz0udgr6s",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 4",
+        "scoreA": 3,
+        "scoreB": 10
+      },
+      {
+        "matchId": "cmn2nbewu0194lvilil2hushf",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 5",
+        "scoreA": 1,
+        "scoreB": 9
+      },
+      {
+        "matchId": "cmn2nbewv0198lvilz8zvwwz6",
+        "round": 1,
+        "homeTeam": "Team 2",
+        "awayTeam": "Team 3",
+        "scoreA": 9,
+        "scoreB": 2
+      },
+      {
+        "matchId": "cmn2nbeww019elvil7b03k12o",
+        "round": 1,
+        "homeTeam": "Team 2",
+        "awayTeam": "Team 4",
+        "scoreA": 4,
+        "scoreB": 3
+      },
+      {
+        "matchId": "cmn2nbewx019ilvilx05xvymy",
+        "round": 1,
+        "homeTeam": "Team 2",
+        "awayTeam": "Team 5",
+        "scoreA": 1,
+        "scoreB": 2
+      },
+      {
+        "matchId": "cmn2nbewz019klvilfoufadsi",
+        "round": 1,
+        "homeTeam": "Team 3",
+        "awayTeam": "Team 4",
+        "scoreA": 6,
+        "scoreB": 4
+      },
+      {
+        "matchId": "cmn2nbex0019olvilbehxo4yj",
+        "round": 1,
+        "homeTeam": "Team 3",
+        "awayTeam": "Team 5",
+        "scoreA": 2,
+        "scoreB": 4
+      },
+      {
+        "matchId": "cmn2nbex2019slviloa98hohg",
+        "round": 1,
+        "homeTeam": "Team 4",
+        "awayTeam": "Team 5",
+        "scoreA": 10,
+        "scoreB": 6
+      }
+    ],
+    "champion": {
+      "teamId": "cmn2nbew3017ulvilrekxmnxc",
+      "teamName": "Team 4",
+      "members": [
+        "TestPlayer_8_1774237697665",
+        "TestPlayer_12_1774237698131",
+        "TestPlayer_16_1774237698585"
+      ]
+    },
+    "tournament": {
+      "id": "cmn2nbc9p0120lviltztvo53l",
+      "name": "Auto-Test ROUND_ROBIN 1774237696452",
+      "division": "MALE"
+    },
+    "error": null,
+    "startedAt": "2026-03-23T03:48:16.452Z",
+    "finishedAt": "2026-03-23T03:48:27.991Z",
+    "duration": 11539
+  },
+  {
+    "mode": "GROUP_STAGE",
+    "status": "SUCCESS",
+    "matches": [
+      {
+        "matchId": "cmn2nbewu0196lvilp64pcpnv",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 3",
+        "scoreA": 3,
+        "scoreB": 10
+      },
+      {
+        "matchId": "cmn2nbeww019alvilamwxe3pi",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 5",
+        "scoreA": 7,
+        "scoreB": 3
+      },
+      {
+        "matchId": "cmn2nbewx019glvilsoecqkbd",
+        "round": 1,
+        "homeTeam": "Team 3",
+        "awayTeam": "Team 5",
+        "scoreA": 10,
+        "scoreB": 3
+      },
+      {
+        "matchId": "cmn2nbewz019mlvilqbkhjrsf",
+        "round": 1,
+        "homeTeam": "Team 2",
+        "awayTeam": "Team 4",
+        "scoreA": 8,
+        "scoreB": 6
+      }
+    ],
+    "champion": {
+      "teamId": "cmn2nbeva015ulvilzhke1bei",
+      "teamName": "Team 1",
+      "members": [
+        "TestPlayer_3_1774237696876",
+        "TestPlayer_10_1774237697901",
+        "TestPlayer_14_1774237698355"
+      ]
+    },
+    "tournament": {
+      "id": "cmn2nbc9j011xlvil5jr2gnrx",
+      "name": "Auto-Test GROUP_STAGE 1774237696452",
+      "division": "MALE"
+    },
+    "error": null,
+    "startedAt": "2026-03-23T03:48:16.452Z",
+    "finishedAt": "2026-03-23T03:48:23.204Z",
+    "duration": 6752
+  }
+]

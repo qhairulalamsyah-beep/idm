@@ -1,0 +1,210 @@
+[
+  {
+    "mode": "SINGLE",
+    "status": "SUCCESS",
+    "matches": [
+      {
+        "matchId": "cmn2n9pyw00yslvilj2d22dyi",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 2",
+        "scoreA": 4,
+        "scoreB": 3
+      },
+      {
+        "matchId": "cmn2n9pz100z0lvilxz1u5qw7",
+        "round": 1,
+        "homeTeam": "Team 3",
+        "awayTeam": "Team 4",
+        "scoreA": 2,
+        "scoreB": 1
+      }
+    ],
+    "champion": null,
+    "tournament": {
+      "id": "cmn2n9nei00r6lvilho2c88op",
+      "name": "Auto-Test SINGLE 1774237617545",
+      "division": "MALE"
+    },
+    "error": null,
+    "startedAt": "2026-03-23T03:46:57.545Z",
+    "finishedAt": "2026-03-23T03:47:03.949Z",
+    "duration": 6404
+  },
+  {
+    "mode": "DOUBLE",
+    "status": "SUCCESS",
+    "matches": [
+      {
+        "matchId": "cmn2n9pxg00vwlvilwj2riha0",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 2",
+        "scoreA": 4,
+        "scoreB": 7
+      },
+      {
+        "matchId": "cmn2n9pxl00w5lvilwy95wys4",
+        "round": 1,
+        "homeTeam": "Team 3",
+        "awayTeam": "Team 4",
+        "scoreA": 10,
+        "scoreB": 1
+      }
+    ],
+    "champion": null,
+    "tournament": {
+      "id": "cmn2n9ne700r1lvil1941gt98",
+      "name": "Auto-Test DOUBLE 1774237617546",
+      "division": "MALE"
+    },
+    "error": null,
+    "startedAt": "2026-03-23T03:46:57.546Z",
+    "finishedAt": "2026-03-23T03:47:05.015Z",
+    "duration": 7469
+  },
+  {
+    "mode": "ROUND_ROBIN",
+    "status": "SUCCESS",
+    "matches": [
+      {
+        "matchId": "cmn2n9pza00zklvilwnkbgus1",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 2",
+        "scoreA": 7,
+        "scoreB": 5
+      },
+      {
+        "matchId": "cmn2n9pzb00zolvilgel76r35",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 3",
+        "scoreA": 6,
+        "scoreB": 4
+      },
+      {
+        "matchId": "cmn2n9pzc00zqlvil3f07tgm6",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 4",
+        "scoreA": 1,
+        "scoreB": 3
+      },
+      {
+        "matchId": "cmn2n9pzd00zwlvil3iczztwc",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 5",
+        "scoreA": 4,
+        "scoreB": 5
+      },
+      {
+        "matchId": "cmn2n9pze0100lvilxey89m4q",
+        "round": 1,
+        "homeTeam": "Team 2",
+        "awayTeam": "Team 3",
+        "scoreA": 6,
+        "scoreB": 3
+      },
+      {
+        "matchId": "cmn2n9pzp010clvilukaiprpx",
+        "round": 1,
+        "homeTeam": "Team 2",
+        "awayTeam": "Team 4",
+        "scoreA": 1,
+        "scoreB": 7
+      },
+      {
+        "matchId": "cmn2n9pzr010elvilhlkpxd2b",
+        "round": 1,
+        "homeTeam": "Team 2",
+        "awayTeam": "Team 5",
+        "scoreA": 9,
+        "scoreB": 7
+      },
+      {
+        "matchId": "cmn2n9pzs010glvilvwj4ag6g",
+        "round": 1,
+        "homeTeam": "Team 3",
+        "awayTeam": "Team 4",
+        "scoreA": 8,
+        "scoreB": 3
+      },
+      {
+        "matchId": "cmn2n9pzu010ilvil86riq8kl",
+        "round": 1,
+        "homeTeam": "Team 3",
+        "awayTeam": "Team 5",
+        "scoreA": 4,
+        "scoreB": 1
+      },
+      {
+        "matchId": "cmn2n9pzw010klvilnh089dun",
+        "round": 1,
+        "homeTeam": "Team 4",
+        "awayTeam": "Team 5",
+        "scoreA": 6,
+        "scoreB": 3
+      }
+    ],
+    "champion": null,
+    "tournament": {
+      "id": "cmn2n9ndy00qylvilnmxywfdb",
+      "name": "Auto-Test ROUND_ROBIN 1774237617546",
+      "division": "MALE"
+    },
+    "error": null,
+    "startedAt": "2026-03-23T03:46:57.546Z",
+    "finishedAt": "2026-03-23T03:47:09.083Z",
+    "duration": 11537
+  },
+  {
+    "mode": "GROUP_STAGE",
+    "status": "SUCCESS",
+    "matches": [
+      {
+        "matchId": "cmn2n9pzc00zslvilw4s3bf4e",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 3",
+        "scoreA": 8,
+        "scoreB": 10
+      },
+      {
+        "matchId": "cmn2n9pze00zylvilwbtr615a",
+        "round": 1,
+        "homeTeam": "Team 1",
+        "awayTeam": "Team 5",
+        "scoreA": 10,
+        "scoreB": 1
+      },
+      {
+        "matchId": "cmn2n9pzf0102lvilen5gar0i",
+        "round": 1,
+        "homeTeam": "Team 3",
+        "awayTeam": "Team 5",
+        "scoreA": 4,
+        "scoreB": 3
+      },
+      {
+        "matchId": "cmn2n9pzh0106lvil7jub7szk",
+        "round": 1,
+        "homeTeam": "Team 2",
+        "awayTeam": "Team 4",
+        "scoreA": 8,
+        "scoreB": 7
+      }
+    ],
+    "champion": null,
+    "tournament": {
+      "id": "cmn2n9nds00qxlvil7e3c8xj0",
+      "name": "Auto-Test GROUP_STAGE 1774237617547",
+      "division": "MALE"
+    },
+    "error": null,
+    "startedAt": "2026-03-23T03:46:57.547Z",
+    "finishedAt": "2026-03-23T03:47:04.381Z",
+    "duration": 6834
+  }
+]
