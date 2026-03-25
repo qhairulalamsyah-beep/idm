@@ -26,7 +26,9 @@ export const metadata: Metadata = {
     icon: [
       { url: "/favicon.png", sizes: "any", type: "image/png" },
     ],
-    apple: "/favicon.png",
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   manifest: "/manifest.json",
   openGraph: {
@@ -47,8 +49,8 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#0f172a" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f172a" },
+    { media: "(prefers-color-scheme: light)", color: "#dc2626" },
+    { media: "(prefers-color-scheme: dark)", color: "#dc2626" },
   ],
 };
 
