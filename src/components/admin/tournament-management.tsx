@@ -88,7 +88,7 @@ export function TournamentManagement() {
   const [showCreateDialog, setShowCreateDialog] = useState(false);
   const [formData, setFormData] = useState({
     name: '', division: 'MALE' as Division, mode: 'GR Arena 3vs3', bpm: 'Random 120-140',
-    bracketType: 'SINGLE_ELIMINATION', maxParticipants: 16, startDate: '', location: '',
+    bracketType: 'SINGLE_ELIMINATION', maxParticipants: 16, startDate: '', location: '', rules: '',
     championAmount: 0, runnerUpAmount: 0, thirdPlaceAmount: 0, mvpAmount: 0,
   });
 
@@ -118,26 +118,30 @@ export function TournamentManagement() {
   };
 
   const createTournament = async () => {
+    console.log('[DEBUG] createTournament called with formData:', formData);
     if (!formData.name || !formData.startDate) {
       toast.error('Nama dan tanggal harus diisi');
       return;
     }
     try {
+      console.log('[DEBUG] Sending request to create tournament...');
       const res = await fetch('/api/tournaments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
       const data = await res.json();
+      console.log('[DEBUG] API response:', data);
       if (data.success) {
         toast.success('Turnamen berhasil dibuat');
         setShowCreateDialog(false);
         fetchTournaments();
-        setFormData({ name: '', division: 'MALE', mode: 'GR Arena 3vs3', bpm: 'Random 120-140', bracketType: 'SINGLE_ELIMINATION', maxParticipants: 16, startDate: '', location: '', championAmount: 0, runnerUpAmount: 0, thirdPlaceAmount: 0, mvpAmount: 0 });
+        setFormData({ name: '', division: 'MALE', mode: 'GR Arena 3vs3', bpm: 'Random 120-140', bracketType: 'SINGLE_ELIMINATION', maxParticipants: 16, startDate: '', location: '', rules: '', championAmount: 0, runnerUpAmount: 0, thirdPlaceAmount: 0, mvpAmount: 0 });
       } else {
         toast.error(data.error || 'Gagal membuat turnamen');
       }
-    } catch {
+    } catch (error) {
+      console.error('[DEBUG] Error creating tournament:', error);
       toast.error('Gagal membuat turnamen');
     }
   };
@@ -256,7 +260,7 @@ export function TournamentManagement() {
                   </div>
                 </div>
               </div>
-              <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={createTournament} className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 font-semibold">
+              <motion.button type="button" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={createTournament} className="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 font-semibold text-white">
                 Buat Turnamen
               </motion.button>
             </div>

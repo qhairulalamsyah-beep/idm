@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Shield, Phone, Lock, Loader2, Sparkles } from 'lucide-react';
+import { Phone, Lock, Loader2, Sparkles } from 'lucide-react';
 import { useAppStore } from '@/store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -74,27 +74,27 @@ export function AdminLogin() {
             <motion.div
               animate={{ 
                 boxShadow: [
-                  '0 0 20px rgba(34,211,238,0.3)',
-                  '0 0 40px rgba(34,211,238,0.5)',
-                  '0 0 20px rgba(34,211,238,0.3)'
+                  '0 0 20px rgba(239, 68, 68, 0.5)',
+                  '0 0 40px rgba(239, 68, 68, 0.8)',
+                  '0 0 20px rgba(239, 68, 68, 0.5)'
                 ]
               }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="w-20 h-20 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center"
+              className="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-600 via-red-700 to-red-800 flex items-center justify-center"
             >
-              <Shield className="w-10 h-10 text-white" />
+              <span className="text-3xl font-bold text-white">IDM</span>
             </motion.div>
             
             {/* Floating particles */}
             <motion.div
               animate={{ y: [-5, 5, -5], opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 3, repeat: Infinity }}
-              className="absolute -top-2 -right-2 w-4 h-4 bg-cyan-400 rounded-full"
+              className="absolute -top-2 -right-2 w-4 h-4 bg-red-400 rounded-full"
             />
             <motion.div
               animate={{ y: [5, -5, 5], opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
-              className="absolute -bottom-1 -left-2 w-3 h-3 bg-blue-400 rounded-full"
+              className="absolute -bottom-1 -left-2 w-3 h-3 bg-orange-400 rounded-full"
             />
           </div>
 

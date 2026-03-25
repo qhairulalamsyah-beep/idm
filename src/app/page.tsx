@@ -140,7 +140,7 @@ export default function HomePage() {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center shadow-lg shadow-red-500/20">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-red-600 via-red-700 to-red-800 flex items-center justify-center shadow-lg shadow-red-500/20">
             <span className="text-2xl font-bold text-white">IDM</span>
           </div>
           <div className="animate-spin w-6 h-6 border-2 border-red-500 border-t-transparent rounded-full" />
