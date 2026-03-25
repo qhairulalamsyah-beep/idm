@@ -9,7 +9,6 @@ import {
 import { useAppStore, useNavigationStore, divisionThemes } from '@/store';
 import { SplashScreen } from '@/components/splash-screen';
 import { AppHeader } from '@/components/app-header';
-import { DivisionTabs } from '@/components/division-tabs';
 import { BottomNavigation } from '@/components/bottom-nav';
 import { TournamentHeroCard } from '@/components/tournament-hero-card';
 import { QuickStats } from '@/components/quick-stats';
@@ -163,9 +162,8 @@ export default function HomePage() {
     <div className={cn("min-h-screen bg-slate-950", theme.bgPattern)}>
       <div className="particles-bg" />
       <div className="relative z-10 min-h-screen flex flex-col">
-        {/* App Header with Logo */}
+        {/* App Header with integrated Division Tabs */}
         <AppHeader />
-        <DivisionTabs />
         <div className="flex-1">
           {activePage === 'home' && <HomeContent activeDivision={activeDivision} />}
           {activePage === 'rank' && <RankContent />}
