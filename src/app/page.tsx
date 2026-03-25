@@ -899,27 +899,34 @@ function ProfileContent() {
     setLoading(true);
     setError('');
     try {
+      console.log('=== Admin Login Request ===');
+      console.log('Username:', username);
+      console.log('Password length:', password.length);
+      
       const res = await fetch('/api/auth', { 
         method: 'PATCH', 
         headers: { 'Content-Type': 'application/json' }, 
         body: JSON.stringify({ username, password }) 
       });
       
-      if (!res.ok) {
-        throw new Error('Login gagal');
-      }
+      console.log('Response status:', res.status);
       
       const data = await res.json();
+      console.log('Response data:', data);
+      
       if (data.success) {
         setUser(data.data);
         setShowLoginModal(false);
         setUsername(''); setPassword(''); setError('');
         setLoginMode('user');
+        console.log('✅ Login successful');
       } else {
         setError(data.error || 'Login gagal');
+        console.log('❌ Login failed:', data.error);
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Terjadi kesalahan');
+      console.error('❌ Login error:', err);
+      setError(err instanceof Error ? err.message : 'Terjadi kesalahan jaringan');
     } finally { 
       setLoading(false); 
     }

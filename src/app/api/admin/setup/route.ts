@@ -1,44 +1,96 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 
-// GET /api/admin/setup - Check database connection and admin user
+// GET /api/admin/setup - Check database and create admin
 export async function GET() {
+  const logs: string[] = [];
+  
   try {
-    console.log('=== Database Connection Test ===');
+    logs.push('=== Starting Admin Setup ===');
+    logs.push(`Time: ${new Date().toISOString()}`);
+    logs.push(`DATABASE_URL exists: ${!!process.env.DATABASE_URL}`);
+    logs.push(`NODE_ENV: ${process.env.NODE_ENV}`);
 
     // Test database connection
-    await db.$queryRaw`SELECT 1`;
-    console.log('✅ Database connected');
+    logs.push('Testing database connection...');
+    try {
+      const result = await db.$queryRaw`SELECT 1 as test`;
+      logs.push(`✅ Database connected: ${JSON.stringify(result)}`);
+    } catch (dbConnError) {
+      logs.push(`❌ Database connection failed: ${dbConnError}`);
+      return NextResponse.json({
+        success: false,
+        error: 'Database connection failed',
+        logs,
+        details: dbConnError instanceof Error ? dbConnError.message : 'Unknown',
+      }, { status: 500 });
+    }
 
-    // Check if admin user exists
+    // Check/create admin user
     const adminPhone = '+6281349924210';
-    let admin = await db.user.findUnique({
-      where: { phone: adminPhone },
-    });
+    logs.push(`Looking for admin with phone: ${adminPhone}`);
+    
+    let admin;
+    try {
+      admin = await db.user.findUnique({
+        where: { phone: adminPhone },
+      });
+      logs.push(`Existing user: ${admin ? JSON.stringify({ id: admin.id, name: admin.name, role: admin.role }) : 'Not found'}`);
+    } catch (findError) {
+      logs.push(`❌ Error finding user: ${findError}`);
+      return NextResponse.json({
+        success: false,
+        error: 'Failed to find user',
+        logs,
+        details: findError instanceof Error ? findError.message : 'Unknown',
+      }, { status: 500 });
+    }
 
     if (!admin) {
-      // Create admin user
-      admin = await db.user.create({
-        data: {
-          phone: adminPhone,
-          name: 'Tazos Admin',
-          role: 'SUPER_ADMIN',
-          tier: 'S',
-        },
-      });
-      console.log('✅ Created admin user:', admin.id);
+      logs.push('Creating new admin user...');
+      try {
+        admin = await db.user.create({
+          data: {
+            phone: adminPhone,
+            name: 'Tazos Admin',
+            role: 'SUPER_ADMIN',
+            tier: 'S',
+          },
+        });
+        logs.push(`✅ Created admin: ${JSON.stringify({ id: admin.id, name: admin.name, role: admin.role })}`);
+      } catch (createError) {
+        logs.push(`❌ Error creating user: ${createError}`);
+        return NextResponse.json({
+          success: false,
+          error: 'Failed to create admin user',
+          logs,
+          details: createError instanceof Error ? createError.message : 'Unknown',
+        }, { status: 500 });
+      }
     } else if (admin.role !== 'SUPER_ADMIN') {
-      // Update to SUPER_ADMIN
-      admin = await db.user.update({
-        where: { id: admin.id },
-        data: { role: 'SUPER_ADMIN', tier: 'S', name: 'Tazos Admin' },
-      });
-      console.log('✅ Updated admin user:', admin.id);
+      logs.push('Updating user to SUPER_ADMIN...');
+      try {
+        admin = await db.user.update({
+          where: { id: admin.id },
+          data: { role: 'SUPER_ADMIN', tier: 'S', name: 'Tazos Admin' },
+        });
+        logs.push(`✅ Updated admin: ${JSON.stringify({ id: admin.id, name: admin.name, role: admin.role })}`);
+      } catch (updateError) {
+        logs.push(`❌ Error updating user: ${updateError}`);
+        return NextResponse.json({
+          success: false,
+          error: 'Failed to update admin user',
+          logs,
+          details: updateError instanceof Error ? updateError.message : 'Unknown',
+        }, { status: 500 });
+      }
     }
+
+    logs.push('=== Admin Setup Complete ===');
 
     return NextResponse.json({
       success: true,
-      message: 'Database connected and admin user ready',
+      message: 'Admin ready! Now try to login.',
       admin: {
         id: admin.id,
         name: admin.name,
@@ -49,33 +101,41 @@ export async function GET() {
         username: 'tazos',
         password: 'tazevsta',
       },
+      logs,
     });
   } catch (error) {
-    console.error('❌ Database error:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Database connection failed',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    logs.push(`❌ Unexpected error: ${error}`);
+    return NextResponse.json({
+      success: false,
+      error: 'Unexpected error',
+      logs,
+      details: error instanceof Error ? error.message : 'Unknown',
+    }, { status: 500 });
   }
 }
 
-// POST /api/admin/setup - Force create/update admin user
+// POST - Force recreate admin
 export async function POST() {
+  const logs: string[] = [];
+  
   try {
-    console.log('=== Force Create Admin User ===');
-
+    logs.push('=== Force Recreate Admin ===');
+    
     const adminPhone = '+6281349924210';
     
-    // Delete existing admin user if any
-    await db.user.deleteMany({
-      where: { phone: adminPhone },
-    });
+    // Delete existing
+    logs.push('Deleting existing admin...');
+    try {
+      const deleted = await db.user.deleteMany({
+        where: { phone: adminPhone },
+      });
+      logs.push(`Deleted ${deleted.count} users`);
+    } catch (delError) {
+      logs.push(`Delete error (might be ok): ${delError}`);
+    }
 
-    // Create fresh admin user
+    // Create fresh
+    logs.push('Creating fresh admin...');
     const admin = await db.user.create({
       data: {
         phone: adminPhone,
@@ -84,12 +144,11 @@ export async function POST() {
         tier: 'S',
       },
     });
-
-    console.log('✅ Created fresh admin user:', admin.id);
+    logs.push(`✅ Created: ${JSON.stringify({ id: admin.id, name: admin.name, role: admin.role })}`);
 
     return NextResponse.json({
       success: true,
-      message: 'Admin user created successfully',
+      message: 'Admin recreated!',
       admin: {
         id: admin.id,
         name: admin.name,
@@ -100,16 +159,15 @@ export async function POST() {
         username: 'tazos',
         password: 'tazevsta',
       },
+      logs,
     });
   } catch (error) {
-    console.error('❌ Error creating admin:', error);
-    return NextResponse.json(
-      {
-        success: false,
-        error: 'Failed to create admin user',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
-    );
+    logs.push(`❌ Error: ${error}`);
+    return NextResponse.json({
+      success: false,
+      error: 'Failed to recreate admin',
+      logs,
+      details: error instanceof Error ? error.message : 'Unknown',
+    }, { status: 500 });
   }
 }
