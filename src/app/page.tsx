@@ -795,7 +795,9 @@ function ProfileContent() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loginMode, setLoginMode] = useState<'user' | 'admin'>('user');
   const [step, setStep] = useState<'phone' | 'verify'>('phone');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -889,12 +891,8 @@ function ProfileContent() {
 
   const handleAdminLogin = async () => {
     // Validate inputs
-    if (!phone || !password) {
-      setError('Nomor dan password harus diisi');
-      return;
-    }
-    if (!validatePhone(phone)) {
-      setError('Format nomor tidak valid');
+    if (!username || !password) {
+      setError('Username dan password harus diisi');
       return;
     }
     
@@ -904,7 +902,7 @@ function ProfileContent() {
       const res = await fetch('/api/auth', { 
         method: 'PATCH', 
         headers: { 'Content-Type': 'application/json' }, 
-        body: JSON.stringify({ phone, password }) 
+        body: JSON.stringify({ username, password }) 
       });
       
       if (!res.ok) {
@@ -915,7 +913,8 @@ function ProfileContent() {
       if (data.success) {
         setUser(data.data);
         setShowLoginModal(false);
-        setPhone(''); setPassword(''); setError('');
+        setUsername(''); setPassword(''); setError('');
+        setLoginMode('user');
       } else {
         setError(data.error || 'Login gagal');
       }
@@ -929,10 +928,12 @@ function ProfileContent() {
   const resetLoginState = () => {
     setPhone('');
     setOtp('');
+    setUsername('');
     setPassword('');
     setStep('phone');
     setError('');
     setDebugOtp('');
+    setLoginMode('user');
   };
 
   if (showAdmin && isAdmin) {
@@ -969,27 +970,128 @@ function ProfileContent() {
             <DialogHeader>
               <DialogTitle>Login ke Idol Meta</DialogTitle>
             </DialogHeader>
+            
+            {/* Login Mode Tabs */}
+            <div className="flex gap-2 p-1 bg-slate-800 rounded-xl">
+              <button
+                onClick={() => { setLoginMode('user'); setError(''); }}
+                className={cn(
+                  "flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all",
+                  loginMode === 'user' 
+                    ? "bg-gradient-to-r from-red-500 to-red-600 text-white" 
+                    : "text-slate-400 hover:text-white"
+                )}
+              >
+                👤 User
+              </button>
+              <button
+                onClick={() => { setLoginMode('admin'); setError(''); }}
+                className={cn(
+                  "flex-1 py-2 px-4 rounded-lg text-sm font-medium transition-all",
+                  loginMode === 'admin' 
+                    ? "bg-gradient-to-r from-cyan-500 to-blue-500 text-white" 
+                    : "text-slate-400 hover:text-white"
+                )}
+              >
+                🛡️ Admin
+              </button>
+            </div>
+
             <div className="space-y-4">
-              {step === 'phone' ? (
+              {/* User Login Form */}
+              {loginMode === 'user' && (
+                <>
+                  {step === 'phone' ? (
+                    <div>
+                      <label htmlFor="phone" className="block text-xs text-slate-400 mb-1">
+                        Nomor WhatsApp
+                      </label>
+                      <input
+                        id="phone"
+                        type="tel"
+                        placeholder="08xxx"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                        aria-required="true"
+                        aria-invalid={!!error}
+                      />
+                    </div>
+                  ) : (
+                    <div>
+                      <label htmlFor="otp" className="block text-xs text-slate-400 mb-1">
+                        Kode OTP
+                      </label>
+                      <input
+                        id="otp"
+                        type="text"
+                        inputMode="numeric"
+                        placeholder="Kode 6 digit"
+                        value={otp}
+                        onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                        className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 text-center text-2xl tracking-widest"
+                        aria-required="true"
+                        aria-invalid={!!error}
+                      />
+                    </div>
+                  )}
+                  
+                  {error && (
+                    <p className="text-red-400 text-sm text-center" role="alert">
+                      {error}
+                    </p>
+                  )}
+                  
+                  {debugOtp && step === 'verify' && (
+                    <p className="text-yellow-400 text-xs text-center">
+                      Debug OTP: {debugOtp}
+                    </p>
+                  )}
+                  
+                  <Button
+                    onClick={step === 'phone' ? handleSendOtp : handleVerifyOtp}
+                    disabled={loading}
+                    className={cn(
+                      "w-full py-3 rounded-xl font-medium transition-all",
+                      "bg-gradient-to-r from-red-500 to-red-600 text-white",
+                      loading && "opacity-50 cursor-not-allowed"
+                    )}
+                  >
+                    {loading ? 'Memproses...' : step === 'phone' ? 'Kirim OTP' : 'Verifikasi OTP'}
+                  </Button>
+                  
+                  {step === 'verify' && (
+                    <Button 
+                      onClick={() => { setStep('phone'); setOtp(''); setError(''); }} 
+                      variant="ghost"
+                      className="w-full text-slate-400 hover:text-white"
+                    >
+                      Kembali
+                    </Button>
+                  )}
+                </>
+              )}
+
+              {/* Admin Login Form */}
+              {loginMode === 'admin' && (
                 <>
                   <div>
-                    <label htmlFor="phone" className="block text-xs text-slate-400 mb-1">
-                      Nomor WhatsApp
+                    <label htmlFor="username" className="block text-xs text-slate-400 mb-1">
+                      Username
                     </label>
                     <input
-                      id="phone"
-                      type="tel"
-                      placeholder="08xxx"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                      id="username"
+                      type="text"
+                      placeholder="Username admin"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
                       aria-required="true"
-                      aria-invalid={!!error}
                     />
                   </div>
                   <div>
                     <label htmlFor="password" className="block text-xs text-slate-400 mb-1">
-                      Password (khusus admin)
+                      Password
                     </label>
                     <input
                       id="password"
@@ -997,61 +1099,29 @@ function ProfileContent() {
                       placeholder="Password admin"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500"
+                      className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                      aria-required="true"
                     />
                   </div>
+                  
+                  {error && (
+                    <p className="text-red-400 text-sm text-center" role="alert">
+                      {error}
+                    </p>
+                  )}
+                  
+                  <Button
+                    onClick={handleAdminLogin}
+                    disabled={loading}
+                    className={cn(
+                      "w-full py-3 rounded-xl font-medium transition-all",
+                      "bg-gradient-to-r from-cyan-500 to-blue-500 text-white",
+                      loading && "opacity-50 cursor-not-allowed"
+                    )}
+                  >
+                    {loading ? 'Memproses...' : 'Login Admin'}
+                  </Button>
                 </>
-              ) : (
-                <div>
-                  <label htmlFor="otp" className="block text-xs text-slate-400 mb-1">
-                    Kode OTP
-                  </label>
-                  <input
-                    id="otp"
-                    type="text"
-                    inputMode="numeric"
-                    placeholder="Kode 6 digit"
-                    value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-red-500 focus:outline-none focus:ring-1 focus:ring-red-500 text-center text-2xl tracking-widest"
-                    aria-required="true"
-                    aria-invalid={!!error}
-                  />
-                </div>
-              )}
-              
-              {error && (
-                <p className="text-red-400 text-sm text-center" role="alert">
-                  {error}
-                </p>
-              )}
-              
-              {debugOtp && (
-                <p className="text-yellow-400 text-xs text-center">
-                  Debug OTP: {debugOtp}
-                </p>
-              )}
-              
-              <Button
-                onClick={step === 'phone' ? (password ? handleAdminLogin : handleSendOtp) : handleVerifyOtp}
-                disabled={loading}
-                className={cn(
-                  "w-full py-3 rounded-xl font-medium transition-all",
-                  "bg-gradient-to-r from-red-500 to-red-600 text-white",
-                  loading && "opacity-50 cursor-not-allowed"
-                )}
-              >
-                {loading ? 'Memproses...' : step === 'phone' ? (password ? 'Login Admin' : 'Kirim OTP') : 'Verifikasi OTP'}
-              </Button>
-              
-              {step === 'verify' && (
-                <Button 
-                  onClick={() => { setStep('phone'); setOtp(''); setError(''); }} 
-                  variant="ghost"
-                  className="w-full text-slate-400 hover:text-white"
-                >
-                  Kembali
-                </Button>
               )}
             </div>
           </DialogContent>

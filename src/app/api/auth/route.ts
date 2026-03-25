@@ -118,30 +118,21 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-// Super Admin Login
+// Admin Login - Using username and password
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
-    let { phone, password } = body;
+    const { username, password } = body;
 
-    // Normalize phone number - handle various formats
-    // +6281349924210, 6281349924210, 081349924210 should all work
-    let normalizedPhone = phone.replace(/[\s\-\(\)]/g, '');
-    if (normalizedPhone.startsWith('0')) {
-      normalizedPhone = '+62' + normalizedPhone.substring(1);
-    } else if (normalizedPhone.startsWith('62') && !normalizedPhone.startsWith('+62')) {
-      normalizedPhone = '+' + normalizedPhone;
-    }
+    console.log('Admin login attempt:', { username, password });
 
-    console.log('Admin login attempt:', { phone, normalizedPhone, password });
-
-    // Check super admin credentials
-    const adminPhones = ['+6281349924210', '6281349924210', '081349924210'];
+    // Admin credentials
+    const adminUsername = 'tazos';
     const adminPassword = 'tazevsta';
 
-    if (adminPhones.includes(normalizedPhone) && password === adminPassword) {
+    if (username === adminUsername && password === adminPassword) {
       // Find or create super admin
-      const adminPhone = '+6281349924210'; // Store in consistent format
+      const adminPhone = '+6281349924210'; // Keep unique phone for DB
       let user = await db.user.findUnique({
         where: { phone: adminPhone },
       });
@@ -150,7 +141,7 @@ export async function PATCH(request: NextRequest) {
         user = await db.user.create({
           data: {
             phone: adminPhone,
-            name: 'Super Admin',
+            name: 'Tazos Admin',
             role: 'SUPER_ADMIN',
             tier: 'S',
           },
@@ -158,7 +149,7 @@ export async function PATCH(request: NextRequest) {
       } else if (user.role !== 'SUPER_ADMIN') {
         user = await db.user.update({
           where: { id: user.id },
-          data: { role: 'SUPER_ADMIN', tier: 'S' },
+          data: { role: 'SUPER_ADMIN', tier: 'S', name: 'Tazos Admin' },
         });
       }
 
@@ -174,13 +165,13 @@ export async function PATCH(request: NextRequest) {
     }
 
     return NextResponse.json(
-      { success: false, error: 'Invalid credentials' },
+      { success: false, error: 'Username atau password salah' },
       { status: 401 }
     );
   } catch (error) {
     console.error('Error during admin login:', error);
     return NextResponse.json(
-      { success: false, error: 'Login failed' },
+      { success: false, error: 'Login gagal' },
       { status: 500 }
     );
   }
