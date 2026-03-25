@@ -122,47 +122,32 @@ export function AppHeader() {
               </div>
             </div>
 
-            {/* Right side - Division Tabs */}
+            {/* Right side - Division Tabs with improved visibility */}
             <div className="flex-shrink-0">
-              <div className="relative flex items-center p-0.5 bg-slate-900/80 rounded-lg border border-slate-700/50">
-                {/* Animated background indicator */}
-                <motion.div
-                  key={activeDivision}
-                  initial={false}
-                  animate={{
-                    x: divisions.findIndex((d) => d.id === activeDivision) * 100 + '%',
-                  }}
-                  transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-                  className={cn(
-                    "absolute w-1/2 h-[calc(100%-4px)] rounded-md",
-                    activeDivision === 'MALE' && "bg-gradient-to-r from-red-600 to-red-700",
-                    activeDivision === 'FEMALE' && "bg-gradient-to-r from-purple-600 to-pink-600"
-                  )}
-                  style={{
-                    boxShadow: activeDivision === 'MALE'
-                      ? '0 0 10px rgba(239, 68, 68, 0.5)'
-                      : '0 0 10px rgba(168, 85, 247, 0.5)'
-                  }}
-                />
-
-                {/* Tab buttons */}
-                {divisions.map((division) => (
-                  <button
-                    key={division.id}
-                    onClick={() => setActiveDivision(division.id)}
-                    className={cn(
-                      "relative z-10 flex items-center justify-center gap-1 px-3 py-1.5 rounded-md",
-                      "text-xs font-bold transition-all duration-200",
-                      "active:scale-95 min-w-[56px]",
-                      activeDivision === division.id
-                        ? "text-white"
-                        : "text-slate-500 hover:text-slate-300"
-                    )}
-                  >
-                    <span className="text-sm">{division.icon}</span>
-                    <span className="hidden sm:inline">{division.label}</span>
-                  </button>
-                ))}
+              <div className="relative flex items-center gap-1 p-1 bg-slate-800/80 rounded-xl border border-slate-700/50">
+                {/* Tab buttons - more visible design */}
+                {divisions.map((division) => {
+                  const isActive = activeDivision === division.id;
+                  return (
+                    <button
+                      key={division.id}
+                      onClick={() => setActiveDivision(division.id)}
+                      className={cn(
+                        "relative flex items-center justify-center gap-1 px-3 py-2 rounded-lg",
+                        "text-xs font-bold transition-all duration-300",
+                        "min-w-[52px]",
+                        // Active state - filled background with glow
+                        isActive && division.id === 'MALE' && "bg-gradient-to-r from-red-600 to-red-700 text-white shadow-lg shadow-red-500/30",
+                        isActive && division.id === 'FEMALE' && "bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/30",
+                        // Inactive state - visible but muted with border
+                        !isActive && "bg-slate-700/50 text-slate-300 border border-slate-600/50 hover:bg-slate-700 hover:text-white"
+                      )}
+                    >
+                      <span className="text-sm">{division.icon}</span>
+                      <span>{division.label}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
